@@ -3,8 +3,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "type": "npm",
-      "script": "start",
+      "command": "pnpm",
+      "args": ["start"],
+      "label": "pnpm: start",
       "isBackground": true,
       "problemMatcher": {
         "owner": "typescript",
@@ -21,8 +22,21 @@
       }
     },
     {
-      "type": "npm",
-      "script": "test",
+      "command": "pnpm",
+      "args": ["build"],
+      "label": "pnpm: build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "clear": true
+      }
+    },
+    {
+      "command": "pnpm",
+      "args": ["test"],
+      "label": "pnpm: test",
       "isBackground": true,
       "problemMatcher": {
         "owner": "typescript",

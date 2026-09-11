@@ -1,5 +1,8 @@
 {
   "name": "lfae.client",
+  "author": {
+    "name": "Isaac Teran"
+  },
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -13,7 +16,7 @@
     "lint": "ng lint"
   },
   "private": true,
-  "packageManager": "npm@11.19.0",
+  "packageManager": "pnpm@12.4.1",
   "dependencies": {
     "@angular/common": "^22.1.0",
     "@angular/compiler": "^22.1.0",
