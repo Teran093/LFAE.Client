@@ -1,0 +1,37 @@
+/* tokens.css */
+@theme {
+  --color-primary: oklch(30.2% 0.043 231.5); /* #153240 */
+  --color-secondary: oklch(43% 0.055 220); /* #196B67 */
+  --color-tertiary: oklch(65% 0.085 80); /* #A87D40 */
+  --color-surface: oklch(97.8% 0.002 145.6); /* #A87D40 */
+
+  /* Opción A — dorado + salvia */
+  /* --color-secondary: oklch(73.1% 0.115 85); #C9A24B */
+  /* --color-tertiary: oklch(65.3% 0.042 155.4); #7C9885 */
+
+  /* Opción B — terracota + verde teal */
+  /* --color-secondary: oklch(61.6% 0.119 37.3);   #C1694F */
+  /* --color-tertiary: oklch(57.5% 0.062 175.6);  #4F8577 */
+
+  /* Opción C — vino + ocre */
+  /* --color-secondary: oklch(44.4% 0.091 7.9);  #7D3C4A */
+  /* --color-tertiary: oklch(66.8% 0.096 72.7);  #B98B4E */
+
+  /* Opción D — malva + taupe */
+  /* --color-secondary3: oklch(67.2% 0.07 354.8); #B98498 */
+  /* --color-tertiary3: oklch(65.6% 0.031 77.4); #9C8F7C */
+
+  /* Fondos claros */
+  /* --color-surface: oklch(97.7% 0.01 87.5);  #FAF7F0 — crema  */
+  /* #F7F8F7 — neutro frío */
+  /* #FCFCFB — casi blanco */
+  /* --color-surface2: oklch(99.1% 0.001 106.4); */
+}
+
+/* fuera de @theme, como reglas CSS normales */
+@custom-variant dark (&:where(.dark, .dark *));
+
+.dark {
+  /* Fondos oscuros */
+  --color-surface: oklch(22.4% 0.028 228.8); /* #0C1E26 */
+}

@@ -27,5 +27,14 @@
 
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+
+  // Configure Tailwind CSS IntelliSense
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "tailwindCSS.classAttributes": ["class", "className", "ngClass", "ngObject"],
+
+  // Disable path suggestions for JavaScript and TypeScript (using Path Intellisense extension)
+  "js/ts.suggest.paths": false
 }
