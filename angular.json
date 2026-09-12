@@ -9,7 +9,44 @@
   "projects": {
     "LFAE.Client": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:class": {
+          "path": "src/app/core/models",
+          "skipTests": true
+        },
+        "@schematics/angular:interface": {
+          "path": "src/app/core/models"
+        },
+        "@schematics/angular:component": {
+          "path": "src/app/shared/components",
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "type": "directive",
+          "path": "src/app/shared/directives",
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "path": "src/app/shared/pipes",
+          "typeSeparator": ".",
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "path": "src/app/core/services",
+          "type": "service",
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "path": "src/app/core/guards",
+          "typeSeparator": ".",
+          "skipTests": true
+        },
+        "@schematics/angular:interceptor": {
+          "path": "src/app/core/interceptors",
+          "typeSeparator": ".",
+          "skipTests": true
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
