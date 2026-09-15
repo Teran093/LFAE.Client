@@ -32,6 +32,16 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   );
 };
 
+/**
+ * Maps an HTTP error's status code to a corresponding AppErrorCode.
+ *
+ * `status: 0` typically indicates a network failure (no connection, CORS issue,
+ * or the server being unreachable) rather than an actual HTTP response.
+ * Any status not explicitly listed falls back to 'UNKNOWN_ERROR'.
+ *
+ * @param error - The raw error caught from the HTTP request (expected to be an HttpErrorResponse).
+ * @returns The AppErrorCode corresponding to the error's status.
+ */
 function getHttpAppErrorCode(error: any): AppErrorCode {
   switch (error.status) {
     case 0:

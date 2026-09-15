@@ -1,19 +1,25 @@
 export class AppError extends Error {
+  /** Whether this error has already been handled (e.g. logged/notified by an interceptor),
+   *  so downstream handlers like GlobalErrorHandler know to skip it. */
   private handled = false;
 
   constructor(
     message: string,
+    /** Machine-readable error category, used to look up the user-facing message. */
     public code: AppErrorCode = 'UNKNOWN_ERROR',
+    /** True if this is an expected/anticipated failure (e.g. validation, 404) as opposed
+     *  to a programming bug or unexpected exception. Useful for deciding log severity. */
     public isOperational?: boolean,
+    /** The original error/exception that triggered this one, preserved for debugging. */
     cause?: unknown,
   ) {
     super(message, { cause: cause });
   }
-
+  /** Read-only accessor exposing whether the error has been marked as handled. */
   public get isHandled(): boolean {
     return this.handled;
   }
-
+  /** Marks the error as handled so it won't be reprocessed (e.g. by GlobalErrorHandler). */
   public markAsHandled(): this {
     this.handled = true;
     return this;
@@ -26,11 +32,14 @@ export class ValidationError extends AppError {
   }
 }
 
+/** All possible error codes: HTTP-specific ones plus generic app-level ones. */
 export type AppErrorCode = HttpErrorCode | 'UNKNOWN_ERROR' | 'VALIDATION_ERROR';
 
+/** Error codes specific to HTTP request failures, mapped from response status codes. */
 export type HttpErrorCode =
   'NETWORK_ERROR' | 'BAD_REQUEST' | 'UNAUTHORIZED' | 'FORBIDDEN' | 'NOT_FOUND' | 'SERVER_ERROR';
 
+/** User-facing message for each error code, shown via the notification service. */
 export const ERROR_MESSAGES: Record<AppErrorCode, string> = {
   UNKNOWN_ERROR: 'Something went wrong. Please try again later.',
   VALIDATION_ERROR: 'Please check the information you entered and try again.',
