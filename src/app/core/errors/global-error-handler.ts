@@ -9,10 +9,15 @@ export class GlobalErrorHandler implements ErrorHandler {
   private notifier = inject(NotificationService);
 
   public handleError(error: unknown): void {
+    if (error instanceof AppError && error.isHandled) {
+      return;
+    }
+
     this.logger.logError(error);
 
     if (error instanceof AppError) {
       this.notifier.showError(ERROR_MESSAGES[error.code]);
+      error.markAsHandled();
     } else if (error instanceof Error) {
       this.notifier.showError(error.message);
     } else {
