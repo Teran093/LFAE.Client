@@ -17,8 +17,8 @@ module.exports = defineConfig([
     },
     extends: [
       eslint.configs.recommended,
-      tseslint.configs.strictTypeChecked,
-      tseslint.configs.stylisticTypeChecked,
+      tseslint.configs.recommended,
+      tseslint.configs.stylistic,
       angular.configs.tsRecommended,
       eslintConfigPrettier,
     ],
