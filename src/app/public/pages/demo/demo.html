@@ -1,0 +1,72 @@
+<div class="flex flex-col p-8 gap-4">
+  <div>
+    <h1>Demo Page</h1>
+    <p>This is a simple demo page for testing components and features.</p>
+  </div>
+  <!-- BUTTONS DEMO -->
+  <div
+    [ngClass]="{
+      'flex w-full flex-col gap-3': true,
+    }"
+  >
+    <h2 class="text-xl font-bold">Button Components</h2>
+    <!-- Btn options -->
+    <div class="gap-2 flex items-center">
+      <app-button
+        buttonStyle="primary"
+        size="medium"
+        display="inline-flex"
+        (clicked)="disableButtons.set(!disableButtons())"
+        >Disable</app-button
+      >
+      <app-button
+        buttonStyle="primary"
+        [outline]="true"
+        size="medium"
+        display="inline-flex"
+        (clicked)="outlineButtons.set(!outlineButtons())"
+        >Outlines</app-button
+      >
+    </div>
+
+    <div
+      [ngClass]="{
+        'flex w-fit py-2 gap-2 items-center': true,
+        'bg-primary/25 px-2 -ml-2': outlineButtons(),
+      }"
+    >
+      <app-button
+        buttonStyle="primary"
+        [disabled]="disableButtons()"
+        [outline]="outlineButtons()"
+        size="medium"
+        display="inline-flex"
+        >Primary</app-button
+      >
+      <app-button
+        buttonStyle="secondary"
+        [disabled]="disableButtons()"
+        [outline]="outlineButtons()"
+        size="medium"
+        display="inline-flex"
+        >Secondary</app-button
+      >
+      <app-button
+        buttonStyle="tertiary"
+        [disabled]="disableButtons()"
+        [outline]="outlineButtons()"
+        size="medium"
+        display="inline-flex"
+        >Tertiary</app-button
+      >
+      <app-button
+        buttonStyle="surface"
+        [disabled]="disableButtons()"
+        [outline]="outlineButtons()"
+        size="medium"
+        display="inline-flex"
+        >Surface</app-button
+      >
+    </div>
+  </div>
+</div>
