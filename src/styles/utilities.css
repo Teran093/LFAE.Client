@@ -1,0 +1,7 @@
+.hover-effect {
+  @apply hover:bg-linear-to-b hover:from-black/10 hover:to-black/10;
+}
+
+.active-effect {
+  @apply active:bg-linear-to-b active:from-black/15 active:to-black/15;
+}

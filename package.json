@@ -4,6 +4,9 @@
     "name": "Isaac Teran"
   },
   "version": "0.0.0",
+  "imports": {
+    "#styles.css": "./src/styles.css"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
