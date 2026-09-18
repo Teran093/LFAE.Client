@@ -1,7 +1,7 @@
 {
   // Format code automatically on save
   "editor.formatOnSave": true,
-  // Show a ruler at 100 characters
+  // Show a ruler at 110 characters
   "editor.rulers": [100],
 
   // Use Prettier as the default formatter for the following languages:

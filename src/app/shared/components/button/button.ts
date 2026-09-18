@@ -46,6 +46,6 @@ export class Button {
   });
 }
 
-export type ButtonStyle = 'primary' | 'secondary' | 'tertiary' | 'navbar' | 'surface';
+export type ButtonStyle = 'primary' | 'secondary' | 'tertiary' | 'surface';
 
 export type ButtonBorderRadius = 'none' | 'small' | 'default' | 'medium' | 'large' | 'full';

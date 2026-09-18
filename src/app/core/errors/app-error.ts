@@ -33,7 +33,7 @@ export class ValidationError extends AppError {
 }
 
 /** All possible error codes: HTTP-specific ones plus generic app-level ones. */
-export type AppErrorCode = HttpErrorCode | 'UNKNOWN_ERROR' | 'VALIDATION_ERROR';
+export type AppErrorCode = HttpErrorCode | 'UNKNOWN_ERROR' | 'VALIDATION_ERROR' | 'INTERNAL_ERROR';
 
 /** Error codes specific to HTTP request failures, mapped from response status codes. */
 export type HttpErrorCode =
@@ -43,6 +43,7 @@ export type HttpErrorCode =
 export const ERROR_MESSAGES: Record<AppErrorCode, string> = {
   UNKNOWN_ERROR: 'Something went wrong. Please try again later.',
   VALIDATION_ERROR: 'Please check the information you entered and try again.',
+  INTERNAL_ERROR: 'An internal application error occurred. Please contact support.',
   NETWORK_ERROR: 'Unable to connect to the server. Please try again later.',
   BAD_REQUEST: 'The request could not be processed.',
   UNAUTHORIZED: 'You are not authorized to perform this action.',
