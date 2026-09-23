@@ -1,0 +1,9 @@
+<div [appOverlay]="selectMenu" orientation="start" [class]="classes()">
+  {{ currentOption()?.label() ?? placeholder() }}
+</div>
+
+<ng-template #selectMenu>
+  <div [class]="menuClasses()">
+    <ng-content></ng-content>
+  </div>
+</ng-template>

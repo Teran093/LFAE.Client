@@ -1,0 +1,32 @@
+@reference "#styles.css";
+:host {
+  @apply w-full;
+}
+
+.select-option-base {
+  @apply flex cursor-pointer w-full;
+}
+
+/* SELECT OPTION SIZES */
+
+/* Primary */
+.select-option-primary {
+  @apply text-surface
+  not-last-of-type:border-b border-surface
+  not-disabled:hover:bg-white/10
+  not-disabled:active:bg-white/15;
+}
+
+/* SELECT OPTION SIZES */
+/* Small */
+.select-option-size-small {
+  @apply px-3 py-1.5 text-sm;
+}
+/* Medium */
+.select-option-size-medium {
+  @apply px-4 py-2 text-base;
+}
+/* Large */
+.select-option-size-large {
+  @apply px-6 py-3 text-lg;
+}

@@ -11,7 +11,7 @@
   >
     <h2 class="text-xl font-bold">Button Components</h2>
     <!-- Btn options -->
-    <div class="gap-2 flex items-center">
+    <div class="gap-2 grid grid-cols-5 items-center w-fit">
       <app-button
         buttonStyle="primary"
         size="medium"
@@ -27,6 +27,12 @@
         (clicked)="outlineButtons.set(!outlineButtons())"
         >Outlines</app-button
       >
+
+      <app-select [(currentValue)]="sizeButtons">
+        <app-select-option label="Small" value="small"></app-select-option>
+        <app-select-option label="Medium" value="medium"></app-select-option>
+        <app-select-option label="Large" value="large"></app-select-option>
+      </app-select>
     </div>
 
     <div
@@ -39,7 +45,7 @@
         buttonStyle="primary"
         [disabled]="disableButtons()"
         [outline]="outlineButtons()"
-        size="medium"
+        [size]="sizeButtons()"
         display="inline-flex"
         >Primary</app-button
       >
@@ -47,7 +53,7 @@
         buttonStyle="secondary"
         [disabled]="disableButtons()"
         [outline]="outlineButtons()"
-        size="medium"
+        [size]="sizeButtons()"
         display="inline-flex"
         >Secondary</app-button
       >
@@ -55,7 +61,7 @@
         buttonStyle="tertiary"
         [disabled]="disableButtons()"
         [outline]="outlineButtons()"
-        size="medium"
+        [size]="sizeButtons()"
         display="inline-flex"
         >Tertiary</app-button
       >
@@ -63,7 +69,7 @@
         buttonStyle="surface"
         [disabled]="disableButtons()"
         [outline]="outlineButtons()"
-        size="medium"
+        [size]="sizeButtons()"
         display="inline-flex"
         >Surface</app-button
       >

@@ -1,0 +1,76 @@
+@reference "#styles.css";
+
+.select-base {
+  @apply cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 transition-colors duration-200 ease-in-out;
+  --select-border-color: transparent;
+  border-color: var(--select-border-color);
+
+  &:hover:not(:disabled):not(.select-outline) {
+    border-color: color-mix(in srgb, var(--select-border-color), black 10%);
+  }
+
+  &:active:not(:disabled):not(.select-outline) {
+    border-color: color-mix(in srgb, var(--select-border-color), black 20%);
+  }
+}
+
+.select-menu-base {
+  @apply flex flex-col overflow-hidden;
+}
+
+/* SELECT STYLES */
+
+/* Primary */
+.select-primary {
+  @apply border border-primary text-surface bg-primary
+  not-disabled:hover:bg-primary-hover
+  not-disabled:active:bg-primary-active;
+  --select-border-color: color-mix(in srgb, var(--color-primary), black 15%);
+}
+.select-menu-primary {
+  @apply bg-primary/95;
+}
+
+/* Surface */
+.select-surface {
+  @apply border text-primary bg-surface
+  not-disabled:hover:bg-surface-hover
+  not-disabled:active:bg-surface-active;
+  --select-border-color: color-mix(in srgb, var(--color-surface), black 15%);
+}
+
+/* SELECT OUTLINE STYLES */
+.select-outline {
+  &:active:not(:disabled):is(.select-outline) {
+    border-color: color-mix(in srgb, var(--select-border-color), black 10%);
+    background-color: color-mix(in srgb, var(--select-border-color), black 10%);
+  }
+}
+
+/* Primary */
+.select-outline-primary {
+  @apply border-2 border-primary text-primary bg-transparent
+  not-disabled:hover:bg-primary not-disabled:hover:text-surface;
+  --select-border-color: var(--color-primary);
+}
+
+/* Surface */
+.select-outline-surface {
+  @apply border-2 border-surface text-surface bg-transparent
+  not-disabled:hover:bg-surface not-disabled:hover:text-primary;
+  --select-border-color: var(--color-surface);
+}
+
+/* SELECT SIZES */
+/* Small */
+.select-size-small {
+  @apply px-3 py-1.5 text-sm;
+}
+/* Medium */
+.select-size-medium {
+  @apply px-4 py-2 text-base;
+}
+/* Large */
+.select-size-large {
+  @apply px-6 py-3 text-lg;
+}
