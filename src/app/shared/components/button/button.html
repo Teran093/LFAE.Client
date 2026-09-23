@@ -1,8 +1,31 @@
-<button
-  [class]="classes()"
-  [disabled]="disabled()"
-  [tabIndex]="tabindex()"
-  (click)="clicked.emit()"
->
+<ng-template #projectedContent>
   <ng-content></ng-content>
-</button>
+</ng-template>
+
+@if (menuOptions()) {
+  <button
+    [class]="classes()"
+    [disabled]="disabled()"
+    [tabIndex]="tabindex()"
+    (click)="clicked.emit($event)"
+    [appOverlay]="buttonMenu"
+    overlayWidth="fit-content"
+    overlayHeight="auto"
+    orientation="start"
+  >
+    <ng-container *ngTemplateOutlet="projectedContent"></ng-container>
+  </button>
+} @else {
+  <button
+    [class]="classes()"
+    [disabled]="disabled()"
+    [tabIndex]="tabindex()"
+    (click)="clicked.emit($event)"
+  >
+    <ng-container *ngTemplateOutlet="projectedContent"></ng-container>
+  </button>
+}
+
+<ng-template #buttonMenu>
+  <app-menu [menuOptions]="menuOptions() ?? []" [placeholder]="menuPlaceholder()"></app-menu>
+</ng-template>
