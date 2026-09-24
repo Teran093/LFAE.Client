@@ -54,7 +54,7 @@
 
 /* MENU CSS */
 .select-menu-base {
-  @apply flex flex-col overflow-hidden shadow-2xl ring-1 ring-black/5;
+  @apply flex flex-col overflow-hidden shadow-2xl;
   background-color: var(--role-bg);
   color: var(--role-text);
   border-color: var(--role-bg);
