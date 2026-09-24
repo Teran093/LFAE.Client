@@ -2,94 +2,52 @@
 
 .btn-base {
   @apply cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 transition-colors duration-200 ease-in-out;
-  --btn-border-color: transparent;
-  border-color: var(--btn-border-color);
+  background-color: var(--role-bg);
+  color: var(--role-text);
+  border-color: var(--role-border);
 
-  &:hover:not(:disabled):not(.btn-outline) {
-    border-color: color-mix(in srgb, var(--btn-border-color), black 10%);
+  &:not(.btn-outline):not(:disabled):hover {
+    background-color: var(--role-bg-hover);
+    border-color: color-mix(in srgb, var(--role-border), black 10%);
   }
-
-  &:active:not(:disabled):not(.btn-outline) {
-    border-color: color-mix(in srgb, var(--btn-border-color), black 20%);
+  &:not(.btn-outline):not(:disabled):active {
+    background-color: var(--role-bg-active);
+    border-color: color-mix(in srgb, var(--role-border), black 20%);
   }
 }
 
 /* BUTTON STYLES */
-
-/* Primary */
-.btn-primary {
-  @apply border border-primary text-surface bg-primary
-  not-disabled:hover:bg-primary-hover
-  not-disabled:active:bg-primary-active;
-  --btn-border-color: color-mix(in srgb, var(--color-primary), black 15%);
-}
-/* Secondary */
-.btn-secondary {
-  @apply border text-surface bg-secondary
-  not-disabled:hover:bg-secondary-hover
-  not-disabled:active:bg-secondary-active;
-  --btn-border-color: color-mix(in srgb, var(--color-secondary), black 15%);
-}
-/* Tertiary */
-.btn-tertiary {
-  @apply border text-surface bg-tertiary
-  not-disabled:hover:bg-tertiary-hover
-  not-disabled:active:bg-tertiary-active;
-  --btn-border-color: color-mix(in srgb, var(--color-tertiary), black 15%);
-}
-/* Surface */
+.btn-primary,
+.btn-secondary,
+.btn-tertiary,
 .btn-surface {
-  @apply border text-primary bg-surface
-  not-disabled:hover:bg-surface-hover
-  not-disabled:active:bg-surface-active;
-  --btn-border-color: color-mix(in srgb, var(--color-surface), black 15%);
+  @apply border;
 }
 
 /* BUTTON OUTLINE STYLES */
 .btn-outline {
-  &:active:not(:disabled):is(.btn-outline) {
-    border-color: color-mix(in srgb, var(--btn-border-color), black 10%);
-    background-color: color-mix(in srgb, var(--btn-border-color), black 10%);
+  @apply border-2 bg-transparent;
+  background-color: transparent;
+  color: var(--role-bg);
+  border-color: var(--role-bg);
+
+  &:not(:disabled):hover {
+    background-color: var(--role-bg);
+    color: var(--role-text);
+  }
+  &:not(:disabled):active {
+    background-color: color-mix(in srgb, var(--role-border), black 10%);
+    border-color: color-mix(in srgb, var(--role-border), black 10%);
   }
 }
 
-/* Primary */
-.btn-outline-primary {
-  @apply border-2 border-primary text-primary bg-transparent
-  not-disabled:hover:bg-primary not-disabled:hover:text-surface;
-  --btn-border-color: var(--color-primary);
-}
-/* Secondary */
-.btn-outline-secondary {
-  @apply border-2 border-secondary text-secondary bg-transparent
-  not-disabled:hover:bg-secondary not-disabled:hover:text-surface
-  not-disabled:active:bg-secondary-hover;
-  --btn-border-color: var(--color-secondary);
-}
-/* Tertiary */
-.btn-outline-tertiary {
-  @apply border-2 border-tertiary text-tertiary bg-transparent
-  not-disabled:hover:bg-tertiary not-disabled:hover:text-surface
-  not-disabled:active:bg-tertiary-hover;
-  --btn-border-color: var(--color-tertiary);
-}
-/* Surface */
-.btn-outline-surface {
-  @apply border-2 border-surface text-surface bg-transparent
-  not-disabled:hover:bg-surface not-disabled:hover:text-primary;
-  --btn-border-color: var(--color-surface);
-}
-
 /* BUTTON SIZES */
-/* Small */
 .btn-size-small {
   @apply px-3 py-1.5 text-sm;
 }
-/* Medium */
 .btn-size-medium {
   @apply px-4 py-2 text-base;
 }
-/* Large */
 .btn-size-large {
   @apply px-6 py-3 text-lg;
 }

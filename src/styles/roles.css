@@ -1,0 +1,30 @@
+@layer base {
+  .role-primary {
+    --role-bg: var(--color-primary);
+    --role-bg-hover: var(--color-primary-hover);
+    --role-bg-active: var(--color-primary-active);
+    --role-text: var(--color-surface);
+    --role-border: color-mix(in srgb, var(--color-primary), black 15%);
+  }
+  .role-secondary {
+    --role-bg: var(--color-secondary);
+    --role-bg-hover: var(--color-secondary-hover);
+    --role-bg-active: var(--color-secondary-active);
+    --role-text: var(--color-surface);
+    --role-border: color-mix(in srgb, var(--color-secondary), black 15%);
+  }
+  .role-tertiary {
+    --role-bg: var(--color-tertiary);
+    --role-bg-hover: var(--color-tertiary-hover);
+    --role-bg-active: var(--color-tertiary-active);
+    --role-text: var(--color-surface);
+    --role-border: color-mix(in srgb, var(--color-tertiary), black 15%);
+  }
+  .role-surface {
+    --role-bg: var(--color-surface);
+    --role-bg-hover: var(--color-surface-hover);
+    --role-bg-active: var(--color-surface-active);
+    --role-text: var(--color-primary);
+    --role-border: color-mix(in srgb, var(--color-surface), black 15%);
+  }
+}

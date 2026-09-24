@@ -3,6 +3,7 @@ import { MenuOption } from '../menu/menu-option';
 import { OverlayDirective } from '../../directives/overlay.directive';
 import { Menu } from '../menu/menu';
 import { NgTemplateOutlet } from '@angular/common';
+import { buildVariantClasses } from '../../utils/style-variants';
 
 @Component({
   imports: [OverlayDirective, Menu, NgTemplateOutlet],
@@ -25,42 +26,17 @@ export class Button {
 
   public clicked = output<void | MouseEvent>();
 
-  protected classes = computed(() => {
-    const base = 'btn-base';
-
-    const radiusMap: Record<ButtonBorderRadius, string> = {
-      none: 'rounded-none',
-      small: 'rounded-sm',
-      default: 'rounded',
-      medium: 'rounded-md',
-      large: 'rounded-lg',
-      full: 'rounded-full',
-    };
-
-    const internalDisplay =
-      this.display() == 'inline-flex' ? ['inline-flex'] : ['flex', 'size-full'];
-
-    const btnStyle = this.outline()
-      ? ['btn-outline', `btn-outline-${this.buttonStyle()}`]
-      : [`btn-${this.buttonStyle()}`];
-
-    const btnSize = `btn-size-${this.size()}`;
-
-    const alignMap: Record<ButtonAlignment, string> = {
-      start: 'justify-start',
-      center: 'justify-center',
-      end: 'justify-end',
-    };
-
-    return [
-      ...internalDisplay,
-      base,
-      ...btnStyle,
-      radiusMap[this.rounded()],
-      btnSize,
-      alignMap[this.align()],
-    ];
-  });
+  protected classes = computed(() =>
+    buildVariantClasses({
+      prefix: 'btn',
+      style: this.buttonStyle(),
+      outline: this.outline(),
+      size: this.size(),
+      rounded: this.rounded(),
+      align: this.align(),
+      display: this.display(),
+    }),
+  );
 }
 
 export type ButtonStyle = 'primary' | 'secondary' | 'tertiary' | 'surface';
