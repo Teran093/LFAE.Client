@@ -8,12 +8,22 @@
   <nav aria-label="Main navegation" class="flex items-center">
     <ul class="grid grid-flow-col auto-cols-max list-none gap-5">
       <li><app-nav-link navTitle="Demo" link="/demo"></app-nav-link></li>
-      <li><app-nav-link navTitle="Events" link="/"></app-nav-link></li>
-      <li><app-nav-link navTitle="Churches" link="/"></app-nav-link></li>
-      <li><app-nav-link navTitle="Immersion" link="/"></app-nav-link></li>
-      <li><app-nav-link navTitle="CEAPE" link="/"></app-nav-link></li>
-      <li><app-nav-link navTitle="About Us" link="/"></app-nav-link></li>
-      <li><app-nav-link navTitle="More" link="/"></app-nav-link></li>
+      <li><app-nav-link navTitle="Events" link="/events"></app-nav-link></li>
+      <li><app-nav-link navTitle="Churches" link="/churches"></app-nav-link></li>
+      <li>
+        <app-nav-link
+          navTitle="Immersion"
+          link="https://oquetemosvistoeouvido.com.br/category/imersao/imersao-ingles/"
+        ></app-nav-link>
+      </li>
+      <li><app-nav-link navTitle="CEAPE" link="/ceape"></app-nav-link></li>
+      <li><app-nav-link navTitle="About Us" link="/about"></app-nav-link></li>
+      <li>
+        <app-nav-link navTitle="More">
+          <app-nav-link navTitle="Photo Gallery" link="/photos"></app-nav-link>
+          <app-nav-link navTitle="More" link="/resources"></app-nav-link>
+        </app-nav-link>
+      </li>
     </ul>
   </nav>
 
