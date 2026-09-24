@@ -1,4 +1,9 @@
-<div [appOverlay]="selectMenu" orientation="start" [class]="classes()">
+<div
+  [appOverlay]="selectMenu"
+  orientation="start"
+  [class]="classes()"
+  [overlayOffset]="menuOffset()"
+>
   {{ currentOption()?.label() ?? placeholder() }}
 </div>
 

@@ -1,4 +1,3 @@
-// shared/style-variants.ts
 export type BorderRadius = 'none' | 'small' | 'default' | 'medium' | 'large' | 'full';
 export type Align = 'start' | 'center' | 'end';
 
@@ -33,7 +32,7 @@ export interface VariantConfig {
   size?: string;
   rounded?: BorderRadius;
   align?: Align;
-  alignMode?: 'justify' | 'items'; // justify para flex-row, items para flex-col
+  alignMode?: 'justify' | 'items';
   display?: 'inline-flex' | 'flex';
 }
 

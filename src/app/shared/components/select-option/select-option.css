@@ -4,17 +4,17 @@
 }
 
 .select-option-base {
-  @apply flex cursor-pointer w-full;
-}
+  @apply flex w-full cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 transition-colors duration-200 ease-in-out
+  not-last-of-type:border-b;
+  color: inherit;
+  border-color: currentColor;
 
-/* SELECT OPTION SIZES */
-
-/* Primary */
-.select-option-primary {
-  @apply text-surface
-  not-last-of-type:border-b border-surface
-  not-disabled:hover:bg-white/10
-  not-disabled:active:bg-white/15;
+  &:not(:disabled):hover {
+    background-color: color-mix(in srgb, currentColor 10%, transparent);
+  }
+  &:not(:disabled):active {
+    background-color: color-mix(in srgb, currentColor 15%, transparent);
+  }
 }
 
 /* SELECT OPTION SIZES */

@@ -1,6 +1,7 @@
 import { Component, computed, contentChildren, effect, input, model, signal } from '@angular/core';
 import { SelectOption } from '../select-option/select-option';
 import { OverlayDirective } from '../../directives/overlay.directive';
+import { buildVariantClasses } from '../../utils/style-variants';
 
 @Component({
   imports: [OverlayDirective],
@@ -22,82 +23,34 @@ export class Select<T> {
   public rounded = input<InputBorderRadius>('default');
   public outline = input<boolean>(false);
   public display = input<'inline-flex' | 'flex'>('flex');
+  public menuOffset = input<number>(4);
 
   protected currentOption = signal<SelectOption<T> | undefined>(undefined);
 
-  protected classes = computed(() => {
-    const base = 'select-base';
+  protected classes = computed(() =>
+    buildVariantClasses({
+      prefix: 'select',
+      style: this.selectStyle(),
+      outline: this.outline(),
+      size: this.size(),
+      rounded: this.rounded(),
+      align: this.align(),
+      display: this.display(),
+    }),
+  );
 
-    const radiusMap: Record<InputBorderRadius, string> = {
-      none: 'rounded-none',
-      small: 'rounded-sm',
-      default: 'rounded',
-      medium: 'rounded-md',
-      large: 'rounded-lg',
-      full: 'rounded-full',
-    };
-
-    const internalDisplay =
-      this.display() == 'inline-flex' ? ['inline-flex'] : ['flex', 'size-full'];
-
-    const selectStyle = this.outline()
-      ? ['select-outline', `select-outline-${this.selectStyle()}`]
-      : [`select-${this.selectStyle()}`];
-
-    const selectSize = `select-size-${this.size()}`;
-
-    const alignMap: Record<InputAlign, string> = {
-      start: 'justify-start',
-      center: 'justify-center',
-      end: 'justify-end',
-    };
-
-    return [
-      ...internalDisplay,
-      base,
-      ...selectStyle,
-      radiusMap[this.rounded()],
-      selectSize,
-      alignMap[this.align()],
-    ];
-  });
-
-  protected menuClasses = computed(() => {
-    const baseMenu = 'select-menu-base';
-
-    const radiusMap: Record<InputBorderRadius, string> = {
-      none: 'rounded-none',
-      small: 'rounded-sm',
-      default: 'rounded',
-      medium: 'rounded-md',
-      large: 'rounded-lg',
-      full: 'rounded-full',
-    };
-
-    const internalDisplay =
-      this.display() == 'inline-flex' ? ['inline-flex'] : ['flex', 'size-full'];
-
-    const selectMenuStyle = this.outline()
-      ? ['select-menu-outline', `select-menu-outline-${this.selectStyle()}`]
-      : [`select-menu-${this.selectStyle()}`];
-
-    const selectMenuSize = `select-menu-size-${this.size()}`;
-
-    const alignMenuMap: Record<InputAlign, string> = {
-      start: 'items-start',
-      center: 'items-center',
-      end: 'items-end',
-    };
-
-    return [
-      ...internalDisplay,
-      baseMenu,
-      ...selectMenuStyle,
-      radiusMap[this.rounded()],
-      selectMenuSize,
-      alignMenuMap[this.align()],
-    ];
-  });
+  protected menuClasses = computed(() =>
+    buildVariantClasses({
+      prefix: 'select-menu',
+      style: this.selectStyle(),
+      outline: this.outline(),
+      size: this.size(),
+      rounded: this.rounded(),
+      align: this.align(),
+      alignMode: 'items',
+      display: this.display(),
+    }),
+  );
 
   constructor() {
     effect(() => {

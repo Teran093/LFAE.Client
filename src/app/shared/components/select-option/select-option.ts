@@ -1,5 +1,6 @@
 import { Component, computed, input, output } from '@angular/core';
-import { InputAlign, InputStyle, Select } from '../select/select';
+import { InputStyle, Select } from '../select/select';
+import { buildVariantClasses } from '../../utils/style-variants';
 
 @Component({
   imports: [],
@@ -20,24 +21,12 @@ export class SelectOption<T> {
     if (!this.father) {
       return [];
     }
-    const optionBase = 'select-option-base';
-
-    const optionStyle = this.father?.outline()
-      ? [
-          'select-option-outline',
-          `select-option-outline-${this.selectOptionStyle() ?? this.father?.selectStyle()}`,
-        ]
-      : [`select-option-${this.selectOptionStyle() ?? this.father?.selectStyle()}`];
-
-    const optionSize = `select-option-size-${this.father?.size()}`;
-
-    const alignMap: Record<InputAlign, string> = {
-      start: 'justify-start',
-      center: 'justify-center',
-      end: 'justify-end',
-    };
-
-    return [optionBase, optionStyle, optionSize, alignMap[this.align() ?? this.father.align()]];
+    return buildVariantClasses({
+      prefix: 'select-option',
+      style: '',
+      size: this.father.size(),
+      align: this.align() ?? this.father.align(),
+    });
   });
 
   public optionClicked = output<T | undefined>();
