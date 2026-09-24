@@ -1,25 +1,44 @@
-@if (isExternal()) {
-  <a
-    [href]="link()"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="flex flex-col group transition-all hover:scale-90 duration-300 ease-in-out"
-  >
-    <span class="text-white min-h-[1.1em]">{{ navTitle() }}</span>
-    <span
-      class="w-0 group-hover:w-full group-focus-visible:w-full h-0.5 rounded-full bg-white duration-300 ease-in-out"
-    ></span>
-  </a>
-} @else {
-  <a
-    [routerLink]="link()"
-    routerLinkActive="active-link"
-    [routerLinkActiveOptions]="{ exact: true }"
-    class="flex flex-col group transition-all hover:scale-90 duration-300 ease-in-out"
-  >
-    <span class="text-white min-h-[1.1em]">{{ navTitle() }}</span>
-    <span
-      class="w-0 group-hover:w-full group-focus-visible:w-full h-0.5 rounded-full bg-white duration-300 ease-in-out"
-    ></span>
-  </a>
-}
+<div
+  class="flex"
+  [appOverlay]="children().length ? navOverlay : undefined"
+  overlayWidth="fit-content"
+  overlayHeight="auto"
+  orientation="start"
+>
+  @if (isExternal()) {
+    <a
+      [href]="link()"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex flex-col group transition-all hover:scale-90 duration-300 ease-in-out"
+    >
+      <span class="text-white min-h-[1.1em]">{{ navTitle() }}</span>
+      <span
+        class="w-0 group-hover:w-full group-focus-visible:w-full h-0.5 rounded-full bg-white duration-300 ease-in-out"
+      ></span>
+    </a>
+  } @else {
+    <a
+      [routerLink]="link()"
+      routerLinkActive="active-link"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="flex flex-col group transition-all hover:scale-90 duration-300 ease-in-out"
+    >
+      <span class="text-white min-h-[1.1em]"
+        >{{ navTitle() }}
+        @if (children().length) {
+          <span>v</span>
+        }
+      </span>
+      <span
+        class="w-0 group-hover:w-full group-focus-visible:w-full h-0.5 rounded-full bg-white duration-300 ease-in-out"
+      ></span>
+    </a>
+  }
+</div>
+
+<ng-template #navOverlay>
+  <div class="flex flex-col bg-primary p-2 gap-2 rounded shadow-2xl">
+    <ng-content></ng-content>
+  </div>
+</ng-template>
