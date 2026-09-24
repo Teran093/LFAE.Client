@@ -52,6 +52,14 @@ export class OverlayDirective implements OnDestroy {
   public enterDelay = input<number>(100);
   public leaveDelay = input<number>(200);
   public overlayClasses = input<string | string[]>('rounded');
+  // Transition properties
+  public enableTransition = input<boolean>(true);
+  public transitionClasses = input<string>('transition ease-out duration-200');
+  public enterFromClass = input<string>('opacity-0 scale-95');
+  public enterToClass = input<string>('opacity-100 scale-100');
+  public leaveFromClass = input<string>('opacity-100 scale-100');
+  public leaveToClass = input<string>('opacity-0 scale-95');
+  public transitionFallbackMs = input<number>(300);
 
   public readonly isOpen = signal<boolean>(false);
 
@@ -124,13 +132,17 @@ export class OverlayDirective implements OnDestroy {
     if (!this.overlayRef || !this.isOpen()) {
       return;
     }
-    this.overlayRef.detach();
+    if (!this.enableTransition()) {
+      this.overlayRef.detach();
+      return;
+    }
+    this.runLeaveTransition();
   }
 
   public open() {
     const template = this.appOverlay();
     if (!template || this.isOpen()) {
-      return; // no-op: sin template, no se puede abrir nada
+      return;
     }
     if (this.isOpen()) {
       return;
@@ -186,11 +198,131 @@ export class OverlayDirective implements OnDestroy {
       this.overlayRef
         .attachments()
         .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(() => this.isOpen.set(true));
+        .subscribe(() => {
+          this.isOpen.set(true);
+          if (this.enableTransition()) {
+            this.runEnterTransition();
+          }
+        });
     }
 
     const templatePortal = new TemplatePortal(template, this.vcr);
     this.overlayRef.attach(templatePortal);
+  }
+
+  /**
+   * Calcula el transform-origin comparando la posición REAL del overlay ya
+   * renderizado (getBoundingClientRect) contra el trigger, en vez de fiarse
+   * de un evento asíncrono como `positionChanges`. Como `positionStrategy.apply()`
+   * se ejecuta de forma síncrona dentro de `overlayRef.attach()` antes de que
+   * se emita `attachments()`, el DOM ya está en su posición final cuando esto
+   * corre — incluso en el primer `open()` — así que no hay condición de carrera.
+   */
+  private getTransformOrigin(): string {
+    const el = this.overlayRef?.overlayElement;
+    if (!el) {
+      return 'center';
+    }
+
+    const overlayRect = el.getBoundingClientRect();
+    const triggerRect = this.element.nativeElement.getBoundingClientRect();
+    const tolerance = 1; // px, por redondeos de subpixel
+
+    let vertical: 'top' | 'bottom' | 'center';
+    if (overlayRect.top >= triggerRect.bottom - tolerance) {
+      vertical = 'top'; // el overlay quedó debajo del trigger
+    } else if (overlayRect.bottom <= triggerRect.top + tolerance) {
+      vertical = 'bottom'; // el overlay quedó arriba del trigger
+    } else {
+      vertical = 'center'; // alineado verticalmente (posición start/end)
+    }
+
+    const distanceLeft = Math.abs(overlayRect.left - triggerRect.left);
+    const distanceRight = Math.abs(overlayRect.right - triggerRect.right);
+    const horizontal = distanceLeft <= distanceRight ? 'left' : 'right';
+
+    return `${vertical} ${horizontal}`;
+  }
+
+  private runEnterTransition() {
+    const el = this.overlayRef?.overlayElement;
+    if (!el) {
+      return;
+    }
+
+    const from = this.enterFromClass().split(' ').filter(Boolean);
+    const to = this.enterToClass().split(' ').filter(Boolean);
+
+    // Ocultamos de inmediato (mismo tick que el attach, sin clase de
+    // transición todavía) para que el usuario nunca vea el estado
+    // intermedio/mal posicionado del primer render.
+    el.classList.add(...from);
+
+    // El contenido (ng-content dentro del ng-template) puede no tener su
+    // layout final resuelto todavía en el mismo tick del attach(). Forzamos
+    // a CDK a re-medir y re-posicionar con el tamaño real ya estable antes
+    // de capturar el transform-origin y arrancar la transición. Sin esto,
+    // en el primer open CDK puede posicionar con una medida ligeramente
+    // distinta a la final, y ese ajuste se ve como un salto/caída.
+    requestAnimationFrame(() => {
+      this.overlayRef?.updatePosition();
+
+      requestAnimationFrame(() => {
+        if (!this.overlayRef) {
+          return;
+        }
+
+        el.style.transformOrigin = this.getTransformOrigin();
+
+        const base = this.transitionClasses().split(' ').filter(Boolean);
+        el.classList.add(...base);
+        void el.offsetHeight;
+        requestAnimationFrame(() => {
+          el.classList.remove(...from);
+          el.classList.add(...to);
+        });
+      });
+    });
+  }
+
+  private runLeaveTransition() {
+    const el = this.overlayRef?.overlayElement;
+    if (!el) {
+      this.overlayRef?.detach();
+      return;
+    }
+
+    el.style.transformOrigin = this.getTransformOrigin();
+
+    const base = this.transitionClasses().split(' ').filter(Boolean);
+    const from = this.leaveFromClass().split(' ').filter(Boolean);
+    const to = this.leaveToClass().split(' ').filter(Boolean);
+
+    let done = false;
+    const finish = () => {
+      if (done) {
+        return;
+      }
+      done = true;
+      el.removeEventListener('transitionend', onEnd);
+      clearTimeout(fallback);
+      this.overlayRef?.detach();
+    };
+    const onEnd = (ev: TransitionEvent) => {
+      if (ev.target === el) {
+        finish();
+      }
+    };
+
+    el.classList.add(...base, ...from);
+    void el.offsetHeight;
+    requestAnimationFrame(() => {
+      el.classList.remove(...from);
+      el.classList.add(...to);
+    });
+
+    el.addEventListener('transitionend', onEnd);
+    const fallback = setTimeout(finish, this.transitionFallbackMs());
   }
 
   protected onMouseEnter() {
@@ -254,7 +386,6 @@ export class OverlayDirective implements OnDestroy {
           .flexibleConnectedTo(this.element)
           .withPositions(this.getConnectedPositions())
           .withFlexibleDimensions(true)
-          .withGrowAfterOpen(true)
           .withPush(true);
       default:
         throw new AppError(
