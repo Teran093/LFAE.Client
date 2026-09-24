@@ -1,0 +1,43 @@
+<header
+  class="shrink-0 grid grid-cols-[1fr_auto_1fr] items-center justify-between bg-primary p-2 grow"
+>
+  <a routerLink="/" aria-label="Navigate to home page" class="text-white">
+    <img src="/logo.svg" alt="Life for All | Europe" />
+  </a>
+
+  <nav aria-label="Main navegation" class="flex items-center">
+    <ul class="grid grid-flow-col auto-cols-max list-none gap-5">
+      <li><app-nav-link navTitle="Demo" link="/demo"></app-nav-link></li>
+      <li><app-nav-link navTitle="Events" link="/"></app-nav-link></li>
+      <li><app-nav-link navTitle="Churches" link="/"></app-nav-link></li>
+      <li><app-nav-link navTitle="Immersion" link="/"></app-nav-link></li>
+      <li><app-nav-link navTitle="CEAPE" link="/"></app-nav-link></li>
+      <li><app-nav-link navTitle="About Us" link="/"></app-nav-link></li>
+      <li><app-nav-link navTitle="More" link="/"></app-nav-link></li>
+    </ul>
+  </nav>
+
+  <div class="flex items-center justify-self-end gap-2">
+    <app-select selectStyle="surface" [outline]="true" [menuOffset]="4">
+      <app-select-option label="EN"></app-select-option>
+      <app-select-option label="ES"></app-select-option>
+      <app-select-option label="PT"></app-select-option>
+    </app-select>
+    <app-button buttonStyle="surface" [outline]="true">Donate</app-button>
+  </div>
+
+  <!-- <button
+    type="button"
+    class="md:hidden"
+    aria-label="Abrir menú de navegación"
+    [attr.aria-expanded]="mobileMenuOpen()"
+    aria-controls="mobile-nav"
+    (click)="mobileMenuOpen.set(!mobileMenuOpen())"
+  > -->
+  <!-- ícono hamburguesa -->
+  <!-- </button> -->
+</header>
+
+<!-- <nav id="mobile-nav" aria-label="Mobile navegation"> -->
+<!-- Navigation buttons, versión mobile -->
+<!-- </nav> -->

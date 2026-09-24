@@ -1,4 +1,4 @@
 @reference "#styles.css";
 :host {
-  @apply bg-surface flex grow flex-col;
+  @apply bg-surface flex size-full flex-col;
 }
