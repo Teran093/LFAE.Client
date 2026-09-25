@@ -2,11 +2,10 @@ import { Component, computed, input, output } from '@angular/core';
 import { MenuOption } from '../menu/menu-option';
 import { OverlayDirective } from '../../directives/overlay.directive';
 import { Menu } from '../menu/menu';
-import { NgTemplateOutlet } from '@angular/common';
 import { buildVariantClasses } from '../../utils/style-variants';
 
 @Component({
-  imports: [OverlayDirective, Menu, NgTemplateOutlet],
+  imports: [OverlayDirective, Menu],
   selector: 'app-button',
   styleUrl: './button.css',
   templateUrl: './button.html',
