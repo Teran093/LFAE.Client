@@ -1,53 +1,55 @@
 export class AppError extends Error {
-  /** Whether this error has already been handled (e.g. logged/notified by an interceptor),
-   *  so downstream handlers like GlobalErrorHandler know to skip it. */
+  /** Indicates if the error was handled to prevent duplicate notifications or logs. */
   private handled = false;
 
   constructor(
     message: string,
-    /** Machine-readable error category, used to look up the user-facing message. */
+    /** Machine-readable code from backend or HTTP fallback. */
     public code: AppErrorCode = 'UNKNOWN_ERROR',
-    /** True if this is an expected/anticipated failure (e.g. validation, 404) as opposed
-     *  to a programming bug or unexpected exception. Useful for deciding log severity. */
-    public isOperational?: boolean,
-    /** The original error/exception that triggered this one, preserved for debugging. */
+    /** True for expected failure (4xx, validation); false for unhandled bugs (5xx, crashes). */
+    public isOperational = true,
+    /** Field-level validation errors mapped by field name. */
+    public fieldErrors?: Record<string, string>,
+    /** Underlying exception preserved for debugging. */
     cause?: unknown,
   ) {
-    super(message, { cause: cause });
+    super(message, { cause });
   }
-  /** Read-only accessor exposing whether the error has been marked as handled. */
+
+  /** Returns whether the error has been processed. */
   public get isHandled(): boolean {
     return this.handled;
   }
-  /** Marks the error as handled so it won't be reprocessed (e.g. by GlobalErrorHandler). */
+
+  /** Flags the error as processed. */
   public markAsHandled(): this {
     this.handled = true;
     return this;
   }
 }
 
-export class ValidationError extends AppError {
-  constructor(message: string, isOperational = true) {
-    super(message, 'VALIDATION_ERROR', isOperational);
-  }
-}
+/** Predefined frontend error codes for IDE autocompletion. */
+export type KnownErrorCode =
+  | 'UNKNOWN_ERROR'
+  | 'NETWORK_ERROR'
+  | 'VALIDATION_ERROR'
+  | 'SERVER_ERROR'
+  | 'BAD_REQUEST'
+  | 'UNAUTHORIZED'
+  | 'FORBIDDEN'
+  | 'NOT_FOUND';
 
-/** All possible error codes: HTTP-specific ones plus generic app-level ones. */
-export type AppErrorCode = HttpErrorCode | 'UNKNOWN_ERROR' | 'VALIDATION_ERROR' | 'INTERNAL_ERROR';
+/** Known error code autocomplete with support for dynamic backend codes. */
+export type AppErrorCode = KnownErrorCode | (string & {});
 
-/** Error codes specific to HTTP request failures, mapped from response status codes. */
-export type HttpErrorCode =
-  'NETWORK_ERROR' | 'BAD_REQUEST' | 'UNAUTHORIZED' | 'FORBIDDEN' | 'NOT_FOUND' | 'SERVER_ERROR';
-
-/** User-facing message for each error code, shown via the notification service. */
-export const ERROR_MESSAGES: Record<AppErrorCode, string> = {
-  UNKNOWN_ERROR: 'Something went wrong. Please try again later.',
-  VALIDATION_ERROR: 'Please check the information you entered and try again.',
-  INTERNAL_ERROR: 'An internal application error occurred. Please contact support.',
-  NETWORK_ERROR: 'Unable to connect to the server. Please try again later.',
-  BAD_REQUEST: 'The request could not be processed.',
-  UNAUTHORIZED: 'You are not authorized to perform this action.',
-  FORBIDDEN: 'You do not have permission to perform this action.',
-  NOT_FOUND: 'The requested resource could not be found.',
-  SERVER_ERROR: 'Something went wrong on the server. Please try again later.',
+/** Maps error codes to i18n translation keys. */
+export const ERROR_I18N_KEYS: Record<string, string> = {
+  UNKNOWN_ERROR: 'ERRORS.UNKNOWN',
+  VALIDATION_ERROR: 'ERRORS.VALIDATION',
+  NETWORK_ERROR: 'ERRORS.NETWORK',
+  UNAUTHORIZED: 'ERRORS.UNAUTHORIZED',
+  FORBIDDEN: 'ERRORS.FORBIDDEN',
+  NOT_FOUND: 'ERRORS.NOT_FOUND',
+  SERVER_ERROR: 'ERRORS.SERVER',
+  EVENT_INVALID_DATES: 'ERRORS.EVENT_INVALID_DATES',
 };

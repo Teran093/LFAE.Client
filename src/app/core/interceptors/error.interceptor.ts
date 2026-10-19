@@ -1,51 +1,43 @@
-import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { catchError, tap, throwError } from 'rxjs';
-import { LoggerService } from '../services/logger.service';
-import { NotificationService } from '../services/notification.service';
-import { AppError, AppErrorCode, ERROR_MESSAGES } from '../errors/app-error';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { catchError, throwError } from 'rxjs';
+import { AppError } from '../errors/app-error';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-  const logger = inject(LoggerService);
-  const notifier = inject(NotificationService);
-
   return next(req).pipe(
-    tap({
-      error: (error) => {
-        logger.logError(error);
-        const errorCode = getHttpAppErrorCode(error);
-        notifier.showError(ERROR_MESSAGES[errorCode]);
-      },
-    }),
-    catchError((error) => {
-      const errorCode = getHttpAppErrorCode(error);
-      const appError = new AppError(
-        error instanceof Error ? error.message : 'Error HTTP desconocido',
-        errorCode,
-        true,
-        error,
-      );
-      appError.markAsHandled();
+    catchError((error: unknown) => {
+      if (error instanceof HttpErrorResponse) {
+        // Connection error or no response from server (Status code 0)
+        if (error.status === 0) {
+          return throwError(
+            () => new AppError('No server connection', 'NETWORK_ERROR', true, undefined, error),
+          );
+        }
 
-      return throwError(() => appError);
+        // Extracting formatted data from Spring Boot's ProblemDetail
+        const problemBody = error.error;
+        const errorCode = problemBody?.code || mapHttpStatusToCode(error.status);
+        const detailMessage = problemBody?.detail || error.message;
+        const fieldErrors = problemBody?.fieldErrors;
+
+        const appError = new AppError(
+          detailMessage,
+          errorCode,
+          error.status < 500,
+          fieldErrors,
+          error,
+        );
+        return throwError(() => appError);
+      }
+
+      return throwError(
+        () => new AppError('Unknown client error', 'UNKNOWN_ERROR', false, undefined, error),
+      );
     }),
   );
 };
 
-/**
- * Maps an HTTP error's status code to a corresponding AppErrorCode.
- *
- * `status: 0` typically indicates a network failure (no connection, CORS issue,
- * or the server being unreachable) rather than an actual HTTP response.
- * Any status not explicitly listed falls back to 'UNKNOWN_ERROR'.
- *
- * @param error - The raw error caught from the HTTP request (expected to be an HttpErrorResponse).
- * @returns The AppErrorCode corresponding to the error's status.
- */
-function getHttpAppErrorCode(error: any): AppErrorCode {
-  switch (error.status) {
-    case 0:
-      return 'NETWORK_ERROR';
+function mapHttpStatusToCode(status: number): string {
+  switch (status) {
     case 400:
       return 'BAD_REQUEST';
     case 401:
@@ -54,12 +46,7 @@ function getHttpAppErrorCode(error: any): AppErrorCode {
       return 'FORBIDDEN';
     case 404:
       return 'NOT_FOUND';
-    case 500:
-    case 502:
-    case 503:
-    case 504:
-      return 'SERVER_ERROR';
     default:
-      return 'UNKNOWN_ERROR';
+      return 'SERVER_ERROR';
   }
 }
