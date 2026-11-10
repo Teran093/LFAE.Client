@@ -1,5 +1,5 @@
 @reference "#styles.css";
 
 :host {
-  @apply flex flex-col;
+  @apply flex flex-col grow;
 }
