@@ -103,7 +103,8 @@
               "buildTarget": "LFAE.Client:build:production"
             },
             "development": {
-              "buildTarget": "LFAE.Client:build:development"
+              "buildTarget": "LFAE.Client:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
