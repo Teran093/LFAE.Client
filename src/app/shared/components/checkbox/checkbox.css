@@ -1,0 +1,32 @@
+@reference "#styles.css";
+
+.checkbox-base {
+  @apply cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 items-center justify-center border-2 transition-colors duration-200 ease-in-out contain-content;
+  background-color: transparent;
+  color: var(--role-text);
+  border-color: var(--role-border);
+
+  &[aria-checked="true"] {
+    background-color: var(--role-bg);
+  }
+  &:not(:disabled):hover {
+    border-color: var(--role-bg-hover);
+  }
+  &[aria-checked="true"]:not(:disabled):hover {
+    background-color: var(--role-bg-hover);
+  }
+  &[aria-checked="true"]:not(:disabled):active {
+    background-color: var(--role-bg-active);
+  }
+}
+
+/* CHECKBOX SIZES */
+.checkbox-size-small {
+  @apply size-4;
+}
+.checkbox-size-medium {
+  @apply size-5;
+}
+.checkbox-size-large {
+  @apply size-6;
+}

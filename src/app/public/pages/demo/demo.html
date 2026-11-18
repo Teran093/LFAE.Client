@@ -53,5 +53,24 @@
         >{{ variant().toString() }}</app-button
       >
     </div>
+
+    <h2 class="text-xl font-bold">Checkbox Components</h2>
+
+    <div
+      [ngClass]="{
+        'flex w-fit py-2 gap-2 items-center': true,
+        'bg-primary/25 px-2 -ml-2': outline(),
+      }"
+    >
+      <app-checkbox
+        variant="primary"
+        [(checked)]="checkboxValue"
+        [disabled]="disable()"
+        [outline]="outline()"
+        [size]="size()"
+        display="inline-flex"
+        class="size-10"
+      ></app-checkbox>
+    </div>
   </div>
 </div>

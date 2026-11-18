@@ -17,4 +17,6 @@ export class Demo {
   protected outline = signal<boolean>(false);
   protected size = signal<'small' | 'medium' | 'large'>('medium');
   protected variant = signal<VariantStyle>('primary');
+
+  protected checkboxValue = signal<boolean>(false);
 }
