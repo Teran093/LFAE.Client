@@ -1,5 +1,4 @@
-export type BorderRadius = 'none' | 'small' | 'default' | 'medium' | 'large' | 'full';
-export type Align = 'start' | 'center' | 'end';
+import { Align, BorderRadius } from '../models/variants.types';
 
 const RADIUS_MAP: Record<BorderRadius, string> = {
   none: 'rounded-none',
@@ -23,11 +22,11 @@ const ITEMS_MAP: Record<Align, string> = {
 };
 
 /**
- * Variant configuration interface used to change the styles of the components in the proyect
+ * Variant configuration interface used to change the styles of the components in the project
  */
 export interface VariantConfig {
-  prefix: string; // 'btn' | 'select' | 'select-menu' | 'select-option'
-  style: string;
+  prefix: string; // 'btn' | 'select' | 'select-menu' | 'select-option' | 'checkbox'
+  style?: string; // optional: without style, no role or variant classes are added
   outline?: boolean;
   size?: string;
   rounded?: BorderRadius;
@@ -43,13 +42,16 @@ export function buildVariantClasses(cfg: VariantConfig): string[] {
     classes.push(...(cfg.display === 'inline-flex' ? ['inline-flex'] : ['flex', 'size-full']));
   }
 
-  classes.push(`${cfg.prefix}-base`, `role-${cfg.style}`); // 👈 agregado
+  classes.push(`${cfg.prefix}-base`);
 
-  classes.push(
-    ...(cfg.outline
-      ? [`${cfg.prefix}-outline`, `${cfg.prefix}-outline-${cfg.style}`]
-      : [`${cfg.prefix}-${cfg.style}`]),
-  );
+  if (cfg.style) {
+    classes.push(`role-${cfg.style}`);
+    classes.push(
+      ...(cfg.outline
+        ? [`${cfg.prefix}-outline`, `${cfg.prefix}-outline-${cfg.style}`]
+        : [`${cfg.prefix}-${cfg.style}`]),
+    );
+  }
 
   if (cfg.size) {
     classes.push(`${cfg.prefix}-size-${cfg.size}`);

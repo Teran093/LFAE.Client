@@ -2,6 +2,9 @@ import { Component, computed, contentChildren, effect, input, model, signal } fr
 import { SelectOption } from '../select-option/select-option';
 import { OverlayDirective } from '../../directives/overlay.directive';
 import { buildVariantClasses } from '../../utils/style-variants';
+import { VariantBase } from '../../bases/variant-base';
+import { Align } from '../../models/variants.types';
+import { FormValueControl } from '@angular/forms/signals';
 
 @Component({
   imports: [OverlayDirective],
@@ -9,19 +12,15 @@ import { buildVariantClasses } from '../../utils/style-variants';
   styleUrl: './select.css',
   templateUrl: './select.html',
 })
-export class Select<T> {
+export class Select<T> extends VariantBase implements FormValueControl<T | undefined> {
   // Options list
   protected selectOptions = contentChildren(SelectOption);
+  protected readonly prefix = 'select';
 
   // Inputs
-  public currentValue = model<T | undefined>();
+  public value = model<T | undefined>();
   public placeholder = input<string>('Select an option...');
-  public disabled = input<boolean>(false);
-  public align = input<InputAlign>('center');
-  public selectStyle = input<InputStyle>('primary');
-  public size = input<'small' | 'medium' | 'large'>('medium');
-  public rounded = input<InputBorderRadius>('default');
-  public outline = input<boolean>(false);
+  public align = input<Align>('center');
   public display = input<'inline-flex' | 'flex'>('flex');
   public menuOffset = input<number>(4);
 
@@ -29,11 +28,8 @@ export class Select<T> {
 
   protected classes = computed(() =>
     buildVariantClasses({
-      prefix: 'select',
-      style: this.selectStyle(),
-      outline: this.outline(),
-      size: this.size(),
-      rounded: this.rounded(),
+      ...this.variantConfig(),
+      prefix: this.prefix,
       align: this.align(),
       display: this.display(),
     }),
@@ -41,11 +37,8 @@ export class Select<T> {
 
   protected menuClasses = computed(() =>
     buildVariantClasses({
-      prefix: 'select-menu',
-      style: this.selectStyle(),
-      outline: this.outline(),
-      size: this.size(),
-      rounded: this.rounded(),
+      ...this.variantConfig(),
+      prefix: `${this.prefix}-menu`,
       align: this.align(),
       alignMode: 'items',
       display: this.display(),
@@ -53,15 +46,17 @@ export class Select<T> {
   );
 
   constructor() {
+    super();
+
     effect(() => {
       const options = this.selectOptions();
       if (options.length === 0) {
         return;
       }
-      const value = this.currentValue();
+      const value = this.value();
       this.currentOption.set(options.find((option) => option.value() === value));
       if (!this.currentOption()) {
-        this.currentValue.set(undefined);
+        this.value.set(undefined);
       }
     });
 
@@ -70,12 +65,12 @@ export class Select<T> {
         return;
       }
 
-      this.selectOptions().forEach((option) => (option.father = this));
+      this.selectOptions().forEach((option) => option.father.set(this));
 
       const subscriptions = this.selectOptions().map((option) =>
         option.optionClicked.subscribe((value) => {
           if (!option.disabled()) {
-            this.currentValue.set(value);
+            this.value.set(value);
             this.currentOption.set(option);
           }
         }),
@@ -84,7 +79,3 @@ export class Select<T> {
     });
   }
 }
-
-export type InputAlign = 'start' | 'center' | 'end';
-export type InputStyle = 'primary' | 'secondary' | 'tertiary' | 'surface';
-export type InputBorderRadius = 'none' | 'small' | 'default' | 'medium' | 'large' | 'full';

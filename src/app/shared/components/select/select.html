@@ -1,11 +1,13 @@
-<div
+<button
+  type="button"
   [appOverlay]="selectMenu"
   orientation="start"
   [class]="classes()"
+  [disabled]="disabled()"
   [overlayOffset]="menuOffset()"
 >
   {{ currentOption()?.label() ?? placeholder() }}
-</div>
+</button>
 
 <ng-template #selectMenu>
   <div [class]="menuClasses()">

@@ -1,6 +1,7 @@
-import { Component, computed, input, output } from '@angular/core';
-import { InputStyle, Select } from '../select/select';
+import { Component, computed, input, output, signal } from '@angular/core';
+import { Select } from '../select/select';
 import { buildVariantClasses } from '../../utils/style-variants';
+import { Align } from '../../models/variants.types';
 
 @Component({
   imports: [],
@@ -9,23 +10,22 @@ import { buildVariantClasses } from '../../utils/style-variants';
   templateUrl: './select-option.html',
 })
 export class SelectOption<T> {
-  public label = input<string | undefined>();
-  public value = input<T | undefined>();
-  public selectOptionStyle = input<InputStyle | undefined>();
+  public label = input<string>();
+  public value = input<T>();
   public disabled = input<boolean>(false);
-  public align = input<'start' | 'center' | 'end'>();
+  public align = input<Align>();
 
-  public father?: Select<T>;
+  public father = signal<Select<T> | undefined>(undefined);
 
   protected classes = computed(() => {
-    if (!this.father) {
+    const father = this.father();
+    if (!father) {
       return [];
     }
     return buildVariantClasses({
       prefix: 'select-option',
-      style: '',
-      size: this.father.size(),
-      align: this.align() ?? this.father.align(),
+      size: father.size(),
+      align: this.align() ?? father.align(),
     });
   });
 

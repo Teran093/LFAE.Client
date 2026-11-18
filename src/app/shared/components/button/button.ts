@@ -2,6 +2,8 @@ import { Component, computed, input, output } from '@angular/core';
 import { MenuOption } from '../menu/menu-option';
 import { OverlayDirective } from '../../directives/overlay.directive';
 import { Menu } from '../menu/menu';
+import { Align } from '../../models/variants.types';
+import { VariantBase } from '../../bases/variant-base';
 import { buildVariantClasses } from '../../utils/style-variants';
 
 @Component({
@@ -10,14 +12,11 @@ import { buildVariantClasses } from '../../utils/style-variants';
   styleUrl: './button.css',
   templateUrl: './button.html',
 })
-export class Button {
+export class Button extends VariantBase {
+  protected readonly prefix = 'btn';
+
   public active = input<boolean>(false);
-  public disabled = input<boolean>(false);
-  public align = input<ButtonAlignment>('center');
-  public buttonStyle = input<ButtonStyle>('primary');
-  public size = input<'small' | 'medium' | 'large'>('medium');
-  public rounded = input<ButtonBorderRadius>('default');
-  public outline = input<boolean>(false);
+  public align = input<Align>('center');
   public display = input<'inline-flex' | 'flex'>('flex');
   public tabindex = input<number>(-1);
   public menuOptions = input<MenuOption[]>();
@@ -27,19 +26,10 @@ export class Button {
 
   protected classes = computed(() =>
     buildVariantClasses({
-      prefix: 'btn',
-      style: this.buttonStyle(),
-      outline: this.outline(),
-      size: this.size(),
-      rounded: this.rounded(),
+      ...this.variantConfig(),
+      prefix: this.prefix,
       align: this.align(),
       display: this.display(),
     }),
   );
 }
-
-export type ButtonStyle = 'primary' | 'secondary' | 'tertiary' | 'surface';
-
-export type ButtonBorderRadius = 'none' | 'small' | 'default' | 'medium' | 'large' | 'full';
-
-export type ButtonAlignment = 'start' | 'center' | 'end';

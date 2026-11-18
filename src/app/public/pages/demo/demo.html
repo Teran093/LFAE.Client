@@ -9,69 +9,48 @@
       'flex w-full flex-col gap-3': true,
     }"
   >
-    <h2 class="text-xl font-bold">Button Components</h2>
     <!-- Btn options -->
-    <div class="gap-2 grid grid-cols-5 items-center w-fit">
-      <app-button
-        buttonStyle="primary"
-        size="medium"
-        display="inline-flex"
-        (clicked)="disableButtons.set(!disableButtons())"
+    <div class="gap-2 flex items-center w-fit">
+      <app-button size="medium" display="inline-flex" (clicked)="disable.set(!disable())"
         >Disable</app-button
       >
       <app-button
-        buttonStyle="primary"
         [outline]="true"
         size="medium"
         display="inline-flex"
-        (clicked)="outlineButtons.set(!outlineButtons())"
+        (clicked)="outline.set(!outline())"
         >Outlines</app-button
       >
 
-      <app-select [(currentValue)]="sizeButtons">
+      <app-select [(value)]="size">
         <app-select-option label="Small" value="small"></app-select-option>
         <app-select-option label="Medium" value="medium"></app-select-option>
         <app-select-option label="Large" value="large"></app-select-option>
       </app-select>
+
+      <app-select [(value)]="variant">
+        <app-select-option label="Primary" value="primary"></app-select-option>
+        <app-select-option label="Secondary" value="secondary"></app-select-option>
+        <app-select-option label="Tertiary" value="tertiary"></app-select-option>
+        <app-select-option label="Surface" value="surface"></app-select-option>
+      </app-select>
     </div>
+
+    <h2 class="text-xl font-bold">Button Components</h2>
 
     <div
       [ngClass]="{
         'flex w-fit py-2 gap-2 items-center': true,
-        'bg-primary/25 px-2 -ml-2': outlineButtons(),
+        'bg-primary/25 px-2 -ml-2': outline(),
       }"
     >
       <app-button
-        buttonStyle="primary"
-        [disabled]="disableButtons()"
-        [outline]="outlineButtons()"
-        [size]="sizeButtons()"
+        [variant]="variant()"
+        [disabled]="disable()"
+        [outline]="outline()"
+        [size]="size()"
         display="inline-flex"
-        >Primary</app-button
-      >
-      <app-button
-        buttonStyle="secondary"
-        [disabled]="disableButtons()"
-        [outline]="outlineButtons()"
-        [size]="sizeButtons()"
-        display="inline-flex"
-        >Secondary</app-button
-      >
-      <app-button
-        buttonStyle="tertiary"
-        [disabled]="disableButtons()"
-        [outline]="outlineButtons()"
-        [size]="sizeButtons()"
-        display="inline-flex"
-        >Tertiary</app-button
-      >
-      <app-button
-        buttonStyle="surface"
-        [disabled]="disableButtons()"
-        [outline]="outlineButtons()"
-        [size]="sizeButtons()"
-        display="inline-flex"
-        >Surface</app-button
+        >{{ variant().toString() }}</app-button
       >
     </div>
   </div>
