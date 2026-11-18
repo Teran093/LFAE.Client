@@ -1,0 +1,22 @@
+<div class="grid grid-cols-4 w-full overflow-y-auto p-4 gap-4">
+  <!-- Languages list -->
+  <section class="flex flex-col p-2 shadow-sm rounded-xl bg-white border border-zinc-200">
+    <h2>Languages</h2>
+    @if (languages.isLoading()) {
+      <div>
+        <p>Loading languages...</p>
+      </div>
+    } @else if (languages.error()) {
+      <div class="flex p-2 border-l-4 bg-red-50 border-red-700">
+        <p>Languages couldn't be loaded</p>
+      </div>
+      <button (click)="languages.reload()">Reintentar</button>
+    } @else {
+      <app-select [value]="currentLang" placeholder="Select a language" display="inline-flex">
+        @for (language of languages.value(); track language.code) {
+          <app-select-option [value]="language" [label]="language.name"></app-select-option>
+        }
+      </app-select>
+    }
+  </section>
+</div>
