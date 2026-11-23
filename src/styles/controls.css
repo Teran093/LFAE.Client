@@ -1,0 +1,60 @@
+/*
+ * Shared look for button-like controls (Button, Select trigger...).
+ * Colors come from the --role-* variables in roles.css, so a new color role never needs
+ * changes here. Import it once in styles.css, after roles.css.
+ *
+ * Display (flex / inline-flex) and border radius are NOT set here: they come from the
+ * classes added by buildVariantClasses().
+ */
+@layer components {
+  .ctrl-base {
+    @apply cursor-pointer items-center gap-2 border transition-colors duration-200 ease-in-out select-none;
+    background-color: var(--role-bg);
+    color: var(--role-text);
+    border-color: var(--role-border);
+
+    &:focus-visible {
+      outline: 2px solid var(--role-accent);
+      outline-offset: 2px;
+    }
+    &:disabled {
+      @apply cursor-not-allowed opacity-50;
+    }
+    &:not(.ctrl-outline):not(:disabled):hover {
+      background-color: var(--role-bg-hover);
+      border-color: color-mix(in srgb, var(--role-border), black 10%);
+    }
+    &:not(.ctrl-outline):not(:disabled):active {
+      background-color: var(--role-bg-active);
+      border-color: color-mix(in srgb, var(--role-border), black 20%);
+    }
+  }
+
+  /* Outline variant: no fill, colored text and border. Defined after .ctrl-base so it wins. */
+  .ctrl-outline {
+    @apply border-2;
+    background-color: transparent;
+    color: var(--role-accent);
+    border-color: var(--role-accent);
+
+    &:not(:disabled):hover {
+      background-color: var(--role-accent);
+      color: var(--role-on-accent);
+    }
+    &:not(:disabled):active {
+      background-color: color-mix(in srgb, var(--role-accent), black 10%);
+      border-color: color-mix(in srgb, var(--role-accent), black 10%);
+      color: var(--role-on-accent);
+    }
+  }
+
+  .ctrl-size-small {
+    @apply px-3 py-1.5 text-sm;
+  }
+  .ctrl-size-medium {
+    @apply px-4 py-2 text-base;
+  }
+  .ctrl-size-large {
+    @apply px-6 py-3 text-lg;
+  }
+}

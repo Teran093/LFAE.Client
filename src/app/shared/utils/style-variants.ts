@@ -1,5 +1,4 @@
-export type BorderRadius = 'none' | 'small' | 'default' | 'medium' | 'large' | 'full';
-export type Align = 'start' | 'center' | 'end';
+import { Align, BorderRadius, VariantSize } from '../models/variants.types';
 
 const RADIUS_MAP: Record<BorderRadius, string> = {
   none: 'rounded-none',
@@ -22,12 +21,19 @@ const ITEMS_MAP: Record<Align, string> = {
   end: 'items-end',
 };
 
+/** Icon size in px for each component size, so icons scale together with the text. */
+export const ICON_SIZE_MAP: Record<VariantSize, number> = {
+  small: 14,
+  medium: 16,
+  large: 20,
+};
+
 /**
- * Variant configuration interface used to change the styles of the components in the proyect
+ * Variant configuration interface used to change the styles of the components in the project
  */
 export interface VariantConfig {
-  prefix: string; // 'btn' | 'select' | 'select-menu' | 'select-option'
-  style: string;
+  prefix: string; // 'ctrl' | 'select-menu' | 'select-option' | 'checkbox'
+  style?: string; // optional: without style, no role or outline classes are added
   outline?: boolean;
   size?: string;
   rounded?: BorderRadius;
@@ -36,6 +42,11 @@ export interface VariantConfig {
   display?: 'inline-flex' | 'flex';
 }
 
+/**
+ * Builds the list of CSS classes of a component:
+ *   [display] {prefix}-base role-{style} [{prefix}-outline] {prefix}-size-{size} [rounded] [align]
+ * The CSS of each prefix lives in styles/controls.css (ctrl) or in the component's own CSS.
+ */
 export function buildVariantClasses(cfg: VariantConfig): string[] {
   const classes: string[] = [];
 
@@ -43,14 +54,14 @@ export function buildVariantClasses(cfg: VariantConfig): string[] {
     classes.push(...(cfg.display === 'inline-flex' ? ['inline-flex'] : ['flex', 'size-full']));
   }
 
-  classes.push(`${cfg.prefix}-base`, `role-${cfg.style}`); // 👈 agregado
+  classes.push(`${cfg.prefix}-base`);
 
-  classes.push(
-    ...(cfg.outline
-      ? [`${cfg.prefix}-outline`, `${cfg.prefix}-outline-${cfg.style}`]
-      : [`${cfg.prefix}-${cfg.style}`]),
-  );
-
+  if (cfg.style) {
+    classes.push(`role-${cfg.style}`);
+  }
+  if (cfg.outline) {
+    classes.push(`${cfg.prefix}-outline`);
+  }
   if (cfg.size) {
     classes.push(`${cfg.prefix}-size-${cfg.size}`);
   }
