@@ -7,12 +7,12 @@
   (click)="optionClicked.emit(value())"
 >
   @if (icon()) {
-    <span [appIcon]="icon()!" [size]="iconSize()" class="shrink-0"></span>
+    <span [appIcon]="icon()!" [size]="currentIconSize()" class="shrink-0"></span>
   }
   <span class="truncate">{{ label() }}</span>
 
   <!-- Check mark on the selected option -->
   @if (selected()) {
-    <span appIcon="phosphorCheckBold" [size]="iconSize()" class="ml-auto shrink-0"></span>
+    <span appIcon="phosphorCheckBold" [size]="currentIconSize()" class="ml-auto shrink-0"></span>
   }
 </button>
