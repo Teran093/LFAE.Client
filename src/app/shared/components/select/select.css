@@ -1,68 +1,18 @@
 @reference "#styles.css";
 
-.select-base {
-  @apply cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 transition-colors duration-200 ease-in-out;
+/* The trigger (button) is styled by styles/controls.css. Only the menu is styled here. */
+
+.select-menu-base {
+  @apply flex max-h-64 min-w-40 flex-col overflow-y-auto border shadow-lg;
   background-color: var(--role-bg);
   color: var(--role-text);
   border-color: var(--role-border);
-
-  &:not(.select-outline):not(:disabled):hover {
-    background-color: var(--role-bg-hover);
-    border-color: color-mix(in srgb, var(--role-border), black 10%);
-  }
-  &:not(.select-outline):not(:disabled):active {
-    background-color: var(--role-bg-active);
-    border-color: color-mix(in srgb, var(--role-border), black 20%);
-  }
 }
 
-/* SELECT STYLES */
-.select-primary,
-.select-secondary,
-.select-tertiary,
-.select-surface {
-  @apply border;
-}
-
-/* SELECT OUTLINE STYLES */
-.select-outline {
-  @apply border-2 bg-transparent;
-  background-color: transparent;
-  color: var(--role-bg);
-  border-color: var(--role-bg);
-
-  &:not(:disabled):hover {
-    background-color: var(--role-bg);
-    color: var(--role-text);
-  }
-  &:not(:disabled):active {
-    background-color: color-mix(in srgb, var(--role-border), black 10%);
-    border-color: color-mix(in srgb, var(--role-border), black 10%);
-  }
-}
-
-/* SELECT SIZES */
-.select-size-small {
-  @apply px-3 py-1.5 text-sm;
-}
-.select-size-medium {
-  @apply px-4 py-2 text-base;
-}
-.select-size-large {
-  @apply px-6 py-3 text-lg;
-}
-
-/* MENU CSS */
-.select-menu-base {
-  @apply flex flex-col overflow-hidden shadow-2xl;
-  background-color: var(--role-bg);
-  color: var(--role-text);
-  border-color: var(--role-bg);
-}
-
+/* Outline: the trigger is transparent, but the menu needs an opaque background to be readable */
 .select-menu-outline {
   @apply border-2;
-  background-color: color-mix(in srgb, var(--role-text) 80%, transparent);
-  color: var(--role-bg);
-  border-color: var(--role-bg);
+  background-color: var(--color-surface);
+  color: var(--role-accent);
+  border-color: var(--role-accent);
 }

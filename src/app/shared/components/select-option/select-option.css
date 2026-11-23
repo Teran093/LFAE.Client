@@ -1,32 +1,41 @@
 @reference "#styles.css";
+
 :host {
-  @apply w-full;
+  @apply block w-full;
 }
 
+/* Rows take the color of the menu (currentColor), so they work with every role and outline */
 .select-option-base {
-  @apply flex w-full cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 transition-colors duration-200 ease-in-out
-  not-last-of-type:border-b;
+  @apply flex w-full cursor-pointer items-center gap-2 transition-colors duration-200 ease-in-out;
   color: inherit;
-  border-color: currentColor;
 
+  &:disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
   &:not(:disabled):hover {
     background-color: color-mix(in srgb, currentColor 10%, transparent);
   }
   &:not(:disabled):active {
     background-color: color-mix(in srgb, currentColor 15%, transparent);
   }
+  &[aria-selected="true"] {
+    @apply font-medium;
+    background-color: color-mix(in srgb, currentColor 12%, transparent);
+  }
+  /* Inset ring so it is not clipped by the menu's overflow */
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: -2px;
+  }
 }
 
 /* SELECT OPTION SIZES */
-/* Small */
 .select-option-size-small {
   @apply px-3 py-1.5 text-sm;
 }
-/* Medium */
 .select-option-size-medium {
   @apply px-4 py-2 text-base;
 }
-/* Large */
 .select-option-size-large {
   @apply px-6 py-3 text-lg;
 }

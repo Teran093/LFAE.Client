@@ -1,67 +1,86 @@
-import { Component, computed, contentChildren, effect, input, model, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  contentChildren,
+  effect,
+  input,
+  model,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { FormValueControl } from '@angular/forms/signals';
 import { SelectOption } from '../select-option/select-option';
 import { OverlayDirective } from '../../directives/overlay.directive';
+import { IconDirective } from '../../directives/icon.directive';
 import { buildVariantClasses } from '../../utils/style-variants';
+import { VariantBase } from '../../bases/variant-base';
+import { Align } from '../../models/variants.types';
 
 @Component({
-  imports: [OverlayDirective],
+  imports: [OverlayDirective, IconDirective],
   selector: 'app-select',
   styleUrl: './select.css',
   templateUrl: './select.html',
 })
-export class Select<T> {
+export class Select<T> extends VariantBase implements FormValueControl<T | undefined> {
   // Options list
   protected selectOptions = contentChildren(SelectOption);
 
+  // The trigger shares its look with Button (see styles/controls.css)
+  protected readonly prefix = 'ctrl';
+
   // Inputs
-  public currentValue = model<T | undefined>();
+  public value = model<T | undefined>();
   public placeholder = input<string>('Select an option...');
-  public disabled = input<boolean>(false);
-  public align = input<InputAlign>('center');
-  public selectStyle = input<InputStyle>('primary');
-  public size = input<'small' | 'medium' | 'large'>('medium');
-  public rounded = input<InputBorderRadius>('default');
-  public outline = input<boolean>(false);
+  /** Horizontal alignment of the content of each option. */
+  public align = input<Align>('start');
   public display = input<'inline-flex' | 'flex'>('flex');
   public menuOffset = input<number>(4);
 
   protected currentOption = signal<SelectOption<T> | undefined>(undefined);
 
+  // The overlay directive placed on the trigger button. It owns the open/close state.
+  private overlay = viewChild(OverlayDirective);
+
+  /** True while the menu is open and not yet closing. Drives the arrow rotation. */
+  protected isOpen = computed(() => {
+    const overlay = this.overlay();
+    return !!overlay && overlay.isOpen() && !overlay.isClosing();
+  });
+
+  /** Width of the trigger, so the menu is never narrower than the button. */
+  protected menuMinWidth = signal<number | undefined>(undefined);
+
   protected classes = computed(() =>
     buildVariantClasses({
-      prefix: 'select',
-      style: this.selectStyle(),
-      outline: this.outline(),
-      size: this.size(),
-      rounded: this.rounded(),
-      align: this.align(),
+      ...this.variantConfig(),
+      prefix: this.prefix,
       display: this.display(),
     }),
   );
 
+  // The menu has no size classes: its rows get their size from each option
   protected menuClasses = computed(() =>
     buildVariantClasses({
       prefix: 'select-menu',
-      style: this.selectStyle(),
+      style: this.variant(),
       outline: this.outline(),
-      size: this.size(),
       rounded: this.rounded(),
-      align: this.align(),
-      alignMode: 'items',
-      display: this.display(),
     }),
   );
 
   constructor() {
+    super();
+
     effect(() => {
       const options = this.selectOptions();
       if (options.length === 0) {
         return;
       }
-      const value = this.currentValue();
+      const value = this.value();
       this.currentOption.set(options.find((option) => option.value() === value));
       if (!this.currentOption()) {
-        this.currentValue.set(undefined);
+        this.value.set(undefined);
       }
     });
 
@@ -70,13 +89,15 @@ export class Select<T> {
         return;
       }
 
-      this.selectOptions().forEach((option) => (option.father = this));
+      this.selectOptions().forEach((option) => option.father.set(this));
 
       const subscriptions = this.selectOptions().map((option) =>
         option.optionClicked.subscribe((value) => {
           if (!option.disabled()) {
-            this.currentValue.set(value);
+            this.value.set(value);
             this.currentOption.set(option);
+            // Clicks inside the menu are not "outside clicks", so close it manually
+            this.overlay()?.close();
           }
         }),
       );
@@ -84,7 +105,3 @@ export class Select<T> {
     });
   }
 }
-
-export type InputAlign = 'start' | 'center' | 'end';
-export type InputStyle = 'primary' | 'secondary' | 'tertiary' | 'surface';
-export type InputBorderRadius = 'none' | 'small' | 'default' | 'medium' | 'large' | 'full';

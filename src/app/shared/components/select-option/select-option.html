@@ -1,3 +1,18 @@
-<button [class]="classes()" (click)="optionClicked.emit(value())">
-  {{ label() }}
+<button
+  type="button"
+  role="option"
+  [class]="classes()"
+  [disabled]="disabled()"
+  [attr.aria-selected]="selected()"
+  (click)="optionClicked.emit(value())"
+>
+  @if (icon()) {
+    <span [appIcon]="icon()!" [size]="iconSize()" class="shrink-0"></span>
+  }
+  <span class="truncate">{{ label() }}</span>
+
+  <!-- Check mark on the selected option -->
+  @if (selected()) {
+    <span appIcon="phosphorCheckBold" [size]="iconSize()" class="ml-auto shrink-0"></span>
+  }
 </button>

@@ -1,14 +1,34 @@
-<div
+<button
+  #trigger
+  type="button"
+  class="justify-between"
+  [class]="classes()"
   [appOverlay]="selectMenu"
   orientation="start"
-  [class]="classes()"
   [overlayOffset]="menuOffset()"
+  [disabled]="disabled()"
+  (click)="menuMinWidth.set(trigger.offsetWidth)"
 >
-  {{ currentOption()?.label() ?? placeholder() }}
-</div>
+  <span class="flex min-w-0 items-center gap-2">
+    @if (currentOption()?.icon(); as iconName) {
+      <span [appIcon]="iconName" [size]="iconSize()" class="shrink-0"></span>
+    }
+    <span class="truncate" [class.opacity-70]="!currentOption()">
+      {{ currentOption()?.label() ?? placeholder() }}
+    </span>
+  </span>
+
+  <!-- Arrow: rotates 180° while the menu is open -->
+  <span
+    appIcon="phosphorCaretDownFill"
+    [size]="iconSize()"
+    class="shrink-0 transition-transform duration-200 ease-in-out"
+    [class.rotate-180]="isOpen()"
+  ></span>
+</button>
 
 <ng-template #selectMenu>
-  <div [class]="menuClasses()">
+  <div role="listbox" [class]="menuClasses()" [style.min-width.px]="menuMinWidth()">
     <ng-content></ng-content>
   </div>
 </ng-template>
