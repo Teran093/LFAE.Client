@@ -63,6 +63,9 @@ export class OverlayDirective implements OnDestroy {
 
   public readonly isOpen = signal<boolean>(false);
 
+  /** True from the start of the leave animation until the overlay is detached. */
+  public readonly isClosing = signal<boolean>(false);
+
   private overlayRef?: OverlayRef;
   private hoverTimer?: ReturnType<typeof setTimeout>;
   private currentClasses: string | string[] = [];
@@ -129,7 +132,8 @@ export class OverlayDirective implements OnDestroy {
   }
 
   public close() {
-    if (!this.overlayRef || !this.isOpen()) {
+    // Ignore the call if it is already closing, so a double click does not stack two transitions
+    if (!this.overlayRef || !this.isOpen() || this.isClosing()) {
       return;
     }
     if (!this.enableTransition()) {
@@ -193,7 +197,10 @@ export class OverlayDirective implements OnDestroy {
       this.overlayRef
         .detachments()
         .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(() => this.isOpen.set(false));
+        .subscribe(() => {
+          this.isOpen.set(false);
+          this.isClosing.set(false);
+        });
 
       this.overlayRef
         .attachments()
@@ -211,12 +218,12 @@ export class OverlayDirective implements OnDestroy {
   }
 
   /**
-   * Calcula el transform-origin comparando la posición REAL del overlay ya
-   * renderizado (getBoundingClientRect) contra el trigger, en vez de fiarse
-   * de un evento asíncrono como `positionChanges`. Como `positionStrategy.apply()`
-   * se ejecuta de forma síncrona dentro de `overlayRef.attach()` antes de que
-   * se emita `attachments()`, el DOM ya está en su posición final cuando esto
-   * corre — incluso en el primer `open()` — así que no hay condición de carrera.
+   * Computes the transform-origin by comparing the REAL position of the already rendered
+   * overlay (getBoundingClientRect) against the trigger, instead of relying on an
+   * asynchronous event like `positionChanges`. Since `positionStrategy.apply()` runs
+   * synchronously inside `overlayRef.attach()` before `attachments()` emits, the DOM is
+   * already in its final position when this runs — even on the first `open()` — so there
+   * is no race condition.
    */
   private getTransformOrigin(): string {
     const el = this.overlayRef?.overlayElement;
@@ -226,15 +233,15 @@ export class OverlayDirective implements OnDestroy {
 
     const overlayRect = el.getBoundingClientRect();
     const triggerRect = this.element.nativeElement.getBoundingClientRect();
-    const tolerance = 1; // px, por redondeos de subpixel
+    const tolerance = 1; // px, to absorb subpixel rounding
 
     let vertical: 'top' | 'bottom' | 'center';
     if (overlayRect.top >= triggerRect.bottom - tolerance) {
-      vertical = 'top'; // el overlay quedó debajo del trigger
+      vertical = 'top'; // the overlay ended up below the trigger
     } else if (overlayRect.bottom <= triggerRect.top + tolerance) {
-      vertical = 'bottom'; // el overlay quedó arriba del trigger
+      vertical = 'bottom'; // the overlay ended up above the trigger
     } else {
-      vertical = 'center'; // alineado verticalmente (posición start/end)
+      vertical = 'center'; // vertically aligned (start/end position)
     }
 
     const distanceLeft = Math.abs(overlayRect.left - triggerRect.left);
@@ -253,17 +260,15 @@ export class OverlayDirective implements OnDestroy {
     const from = this.enterFromClass().split(' ').filter(Boolean);
     const to = this.enterToClass().split(' ').filter(Boolean);
 
-    // Ocultamos de inmediato (mismo tick que el attach, sin clase de
-    // transición todavía) para que el usuario nunca vea el estado
-    // intermedio/mal posicionado del primer render.
+    // Hide immediately (same tick as the attach, with no transition class yet) so the user
+    // never sees the intermediate/mispositioned state of the first render.
     el.classList.add(...from);
 
-    // El contenido (ng-content dentro del ng-template) puede no tener su
-    // layout final resuelto todavía en el mismo tick del attach(). Forzamos
-    // a CDK a re-medir y re-posicionar con el tamaño real ya estable antes
-    // de capturar el transform-origin y arrancar la transición. Sin esto,
-    // en el primer open CDK puede posicionar con una medida ligeramente
-    // distinta a la final, y ese ajuste se ve como un salto/caída.
+    // The content (ng-content inside the ng-template) may not have its final layout resolved
+    // yet in the same tick as attach(). We force CDK to re-measure and re-position with the
+    // real, stable size before capturing the transform-origin and starting the transition.
+    // Without this, on the first open CDK can position using a slightly different measurement
+    // than the final one, and that adjustment shows up as a jump/drop.
     requestAnimationFrame(() => {
       this.overlayRef?.updatePosition();
 
@@ -291,6 +296,8 @@ export class OverlayDirective implements OnDestroy {
       this.overlayRef?.detach();
       return;
     }
+
+    this.isClosing.set(true);
 
     el.style.transformOrigin = this.getTransformOrigin();
 
