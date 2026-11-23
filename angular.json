@@ -70,6 +70,9 @@
             },
             "ssr": {
               "entry": "src/server.ts"
+            },
+            "loader": {
+              ".svg": "text"
             }
           },
           "configurations": {
