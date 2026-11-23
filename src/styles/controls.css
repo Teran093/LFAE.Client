@@ -3,12 +3,12 @@
  * Colors come from the --role-* variables in roles.css, so a new color role never needs
  * changes here. Import it once in styles.css, after roles.css.
  *
- * Display (flex / inline-flex) and border radius are NOT set here: they come from the
+ * Border radius is NOT set here: it comes from the
  * classes added by buildVariantClasses().
  */
 @layer components {
   .ctrl-base {
-    @apply cursor-pointer items-center gap-2 border transition-colors duration-200 ease-in-out select-none;
+    @apply flex w-full cursor-pointer items-center gap-2 border transition-colors duration-200 ease-in-out select-none;
     background-color: var(--role-bg);
     color: var(--role-text);
     border-color: var(--role-border);

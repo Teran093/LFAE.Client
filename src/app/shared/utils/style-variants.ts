@@ -39,7 +39,6 @@ export interface VariantConfig {
   rounded?: BorderRadius;
   align?: Align;
   alignMode?: 'justify' | 'items';
-  display?: 'inline-flex' | 'flex';
 }
 
 /**
@@ -49,10 +48,6 @@ export interface VariantConfig {
  */
 export function buildVariantClasses(cfg: VariantConfig): string[] {
   const classes: string[] = [];
-
-  if (cfg.display) {
-    classes.push(...(cfg.display === 'inline-flex' ? ['inline-flex'] : ['flex', 'size-full']));
-  }
 
   classes.push(`${cfg.prefix}-base`);
 

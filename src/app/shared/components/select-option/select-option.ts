@@ -2,7 +2,7 @@ import { Component, computed, input, output, signal } from '@angular/core';
 import { Select } from '../select/select';
 import { buildVariantClasses, ICON_SIZE_MAP } from '../../utils/style-variants';
 import { Align } from '../../models/variants.types';
-import { IconDirective, IconName } from '../../directives/icon.directive';
+import { IconDirective, AppIconName } from '../../directives/icon.directive';
 
 @Component({
   imports: [IconDirective],
@@ -17,8 +17,8 @@ export class SelectOption<T> {
   public align = input<Align>();
 
   /** Optional icon shown before the label. */
-  public icon = input<IconName>();
-  public iconSize = input<IconName | undefined>();
+  public icon = input<AppIconName>();
+  public iconSize = input<number | string | undefined>();
   protected currentIconSize = computed(
     () => this.iconSize() ?? ICON_SIZE_MAP[this.father()?.size() ?? 'medium'],
   );

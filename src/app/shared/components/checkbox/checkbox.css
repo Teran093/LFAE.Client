@@ -2,7 +2,7 @@
 
 /* Filled variant: the box is filled with the role color when checked */
 .checkbox-base {
-  @apply cursor-pointer items-center justify-center border-2 transition-colors duration-200 ease-in-out contain-content;
+  @apply flex cursor-pointer items-center justify-center border-2 transition-colors duration-200 ease-in-out contain-content;
   background-color: transparent;
   color: var(--role-text);
   border-color: var(--role-border);

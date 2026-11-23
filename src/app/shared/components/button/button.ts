@@ -17,7 +17,6 @@ export class Button extends VariantBase {
 
   public active = input<boolean>(false);
   public align = input<Align>('center');
-  public display = input<'inline-flex' | 'flex'>('flex');
   public tabindex = input<number>(-1);
   public menuOptions = input<MenuOption[]>();
   public menuPlaceholder = input<string>();
@@ -29,7 +28,6 @@ export class Button extends VariantBase {
       ...this.variantConfig(),
       prefix: this.prefix,
       align: this.align(),
-      display: this.display(),
     }),
   );
 }

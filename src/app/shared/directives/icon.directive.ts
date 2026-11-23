@@ -41,7 +41,7 @@ import { CUSTOM_ICON_LIST, CustomIconName } from '../models/custom-icon-list';
 })
 export class IconDirective {
   /** Library icon key or custom icon key. */
-  public appIcon = input.required<IconName>();
+  public appIcon = input.required<AppIconName>();
 
   /** Icon size. A number is read as pixels, a string as any CSS size (e.g. "1.5rem").
    * Default size is 24px.
@@ -78,7 +78,7 @@ export class IconDirective {
     });
   }
 
-  private isLibraryIcon(name: IconName): name is LibraryIconName {
+  private isLibraryIcon(name: AppIconName): name is LibraryIconName {
     return Object.hasOwn(NG_ICON_LIST, name);
   }
 
@@ -114,4 +114,4 @@ export class IconDirective {
 export type LibraryIconName = keyof typeof NG_ICON_LIST;
 
 /** Every valid icon name: keys of NG_ICON_LIST plus keys of CUSTOM_ICON_LIST. */
-export type IconName = LibraryIconName | CustomIconName;
+export type AppIconName = LibraryIconName | CustomIconName;

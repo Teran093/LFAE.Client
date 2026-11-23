@@ -16,3 +16,13 @@
   color: var(--role-accent);
   border-color: var(--role-accent);
 }
+
+.ctrl-size-small {
+  @apply pr-2;
+}
+.ctrl-size-medium {
+  @apply pr-3;
+}
+.ctrl-size-large {
+  @apply pr-5;
+}

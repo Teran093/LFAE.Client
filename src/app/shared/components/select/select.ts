@@ -34,7 +34,6 @@ export class Select<T> extends VariantBase implements FormValueControl<T | undef
   public placeholder = input<string>('Select an option...');
   /** Horizontal alignment of the content of each option. */
   public align = input<Align>('start');
-  public display = input<'inline-flex' | 'flex'>('flex');
   public menuOffset = input<number>(4);
 
   protected currentOption = signal<SelectOption<T> | undefined>(undefined);
@@ -55,7 +54,6 @@ export class Select<T> extends VariantBase implements FormValueControl<T | undef
     buildVariantClasses({
       ...this.variantConfig(),
       prefix: this.prefix,
-      display: this.display(),
     }),
   );
 

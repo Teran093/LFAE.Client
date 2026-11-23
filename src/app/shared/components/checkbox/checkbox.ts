@@ -18,7 +18,6 @@ export class Checkbox extends VariantBase implements FormCheckboxControl {
     buildVariantClasses({
       ...this.variantConfig(),
       prefix: this.prefix,
-      display: 'inline-flex',
     }),
   );
 

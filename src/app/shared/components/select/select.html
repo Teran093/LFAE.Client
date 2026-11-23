@@ -11,7 +11,11 @@
 >
   <span class="flex min-w-0 items-center gap-2">
     @if (currentOption()?.icon(); as iconName) {
-      <span [appIcon]="iconName" [size]="iconSize()" class="shrink-0"></span>
+      <span
+        [appIcon]="iconName"
+        [size]="currentOption()?.iconSize() ?? iconSize()"
+        class="shrink-0"
+      ></span>
     }
     <span class="truncate" [class.opacity-70]="!currentOption()">
       {{ currentOption()?.label() ?? placeholder() }}
