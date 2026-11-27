@@ -1,0 +1,21 @@
+<header
+  class="shrink-0 grid grid-cols-[1fr_auto_1fr] items-center justify-between bg-tertiary p-2 grow"
+>
+  <a routerLink="/" aria-label="Navigate to home page" class="text-white">
+    <img src="/logo.svg" alt="Life for All | Europe" />
+  </a>
+
+  <nav aria-label="Main navegation" class="flex items-center">
+    <ul class="grid grid-flow-col auto-cols-max list-none gap-5">
+      <li><app-nav-link navTitle="Demo" link="/demo"></app-nav-link></li>
+    </ul>
+  </nav>
+
+  <div class="flex items-center justify-self-end gap-2">
+    <app-select variant="surface" [outline]="true" [menuOffset]="4">
+      <app-select-option label="EN"></app-select-option>
+      <app-select-option label="ES"></app-select-option>
+      <app-select-option label="PT"></app-select-option>
+    </app-select>
+  </div>
+</header>

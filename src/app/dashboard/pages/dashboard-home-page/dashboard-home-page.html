@@ -1,0 +1,61 @@
+<div class="flex w-full overflow-y-auto p-4 gap-4">
+  <!-- Languages list -->
+  <section
+    class="flex basis-2xs flex-col p-2 shadow-sm rounded-xl bg-white border border-zinc-200 gap-5"
+  >
+    <h2>Languages</h2>
+    <div class="flex flex-col gap-3">
+      @if (languages.isLoading()) {
+        <div>
+          <p>Loading languages...</p>
+        </div>
+      } @else if (languages.error()) {
+        <div class="flex p-2 border-l-4 bg-red-50 border-red-700">
+          <p>Languages couldn't be loaded</p>
+        </div>
+        <app-button (clicked)="languages.reload()">Retry</app-button>
+      } @else {
+        <app-select
+          [value]="selectedLangCode()"
+          (valueChange)="selectedLangCode.set($event)"
+          placeholder="Select a language"
+          display="inline-flex"
+          rounded="medium"
+          class="w-full"
+        >
+          @for (language of languages.value(); track language.code) {
+            <app-select-option
+              [value]="language.code"
+              [label]="language.name"
+              [icon]="langIcons[language.code] ?? 'phosphorEmpty'"
+              [iconSize]="24"
+            ></app-select-option>
+          }
+        </app-select>
+
+        @if (currentLang(); as language) {
+          <div class="flex flex-col gap-3">
+            <h3>Config</h3>
+
+            <div class="flex gap-3 items-center">
+              <div class="flex gap-2 items-center">
+                <span>Active:</span>
+                <app-checkbox [(checked)]="language.active"></app-checkbox>
+              </div>
+              <div class="flex gap-2 items-center">
+                <span>Default:</span>
+                <app-checkbox [(checked)]="language.isDefault"></app-checkbox>
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <app-button [outline]="true" (clicked)="languageConfigChanged()" class="grow h-full"
+              >Reset</app-button
+            >
+            <app-button (clicked)="languageConfigChanged()" class="grow h-full">Save</app-button>
+          </div>
+        }
+      }
+    </div>
+  </section>
+</div>
