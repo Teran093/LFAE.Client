@@ -1,8 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import "tailwindcss";
+
+@import "@fontsource-variable/manrope";
+@import "@fontsource/fira-sans/200.css";
+@import "@fontsource/fira-sans/300.css";
+@import "@fontsource/fira-sans/400.css";
+@import "@fontsource/fira-sans/400-italic.css";
+@import "@fontsource/fira-sans/500.css";
+@import "@fontsource/fira-sans/700.css";
+
 @import "./styles/token.css";
 @import "./styles/base.css";
+@import "./styles/typography.css";
 @import "./styles/components.css";
 @import "./styles/utilities.css";
 @import "./styles/roles.css";

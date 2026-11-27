@@ -1,0 +1,46 @@
+/*
+ * Page-level typography. The fonts come from --font-display and --font-sans (token.css).
+ * Tailwind's preflight resets headings to inherit size and weight, so they are styled here.
+ * Everything is inside @layer base, so any utility class (text-sm, font-light...) overrides it.
+ */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* 18px text with generous line height: comfortable for older readers */
+  body {
+    @apply bg-surface text-ink text-lg leading-relaxed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-ink leading-tight text-balance;
+  }
+
+  h1 {
+    @apply text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl;
+  }
+  h2 {
+    @apply text-2xl font-bold tracking-tight sm:text-3xl;
+  }
+  h3 {
+    @apply text-xl font-bold sm:text-2xl;
+  }
+  h4 {
+    @apply text-lg font-semibold;
+  }
+
+  /* Avoids a single word alone on the last line of a paragraph */
+  p {
+    @apply text-pretty;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-tertiary) 35%, transparent);
+  }
+}
