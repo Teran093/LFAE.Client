@@ -76,6 +76,12 @@ module.exports = defineConfig([
   {
     files: ["**/*.html"],
     extends: [angular.configs.templateRecommended, angular.configs.templateAccessibility],
-    rules: {},
+    rules: {
+      // Our form components render a native <button>, which a wrapping <label> can name
+      "@angular-eslint/template/label-has-associated-control": [
+        "error",
+        { controlComponents: ["app-checkbox", "app-select"] },
+      ],
+    },
   },
 ]);

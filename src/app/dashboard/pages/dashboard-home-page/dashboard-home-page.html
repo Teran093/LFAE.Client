@@ -33,26 +33,42 @@
           }
         </app-select>
 
-        @if (currentLang(); as language) {
+        @if (draft(); as draft) {
           <div class="flex flex-col gap-3">
             <h3>Config</h3>
 
             <div class="flex gap-3 items-center">
-              <div class="flex gap-2 items-center">
+              <!-- The <label> gives each checkbox its accessible name, and clicking the text toggles it -->
+              <label class="flex gap-2 items-center">
                 <span>Active:</span>
-                <app-checkbox [(checked)]="language.active"></app-checkbox>
-              </div>
-              <div class="flex gap-2 items-center">
+                <app-checkbox
+                  [checked]="draft.active"
+                  (checkedChange)="setDraft('active', $event)"
+                ></app-checkbox>
+              </label>
+              <label class="flex gap-2 items-center">
                 <span>Default:</span>
-                <app-checkbox [(checked)]="language.isDefault"></app-checkbox>
-              </div>
+                <app-checkbox
+                  [checked]="draft.isDefault"
+                  (checkedChange)="setDraft('isDefault', $event)"
+                ></app-checkbox>
+              </label>
             </div>
           </div>
           <div class="flex gap-2">
-            <app-button [outline]="true" (clicked)="languageConfigChanged()" class="grow h-full"
+            <app-button
+              [outline]="true"
+              [disabled]="!hasChanges() || isSaving()"
+              (clicked)="reset()"
+              class="grow h-full"
               >Reset</app-button
             >
-            <app-button (clicked)="languageConfigChanged()" class="grow h-full">Save</app-button>
+            <app-button
+              [disabled]="!hasChanges() || isSaving()"
+              (clicked)="save()"
+              class="grow h-full"
+              >Save</app-button
+            >
           </div>
         }
       }
