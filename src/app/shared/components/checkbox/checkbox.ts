@@ -3,6 +3,7 @@ import { VariantBase } from '../../bases/variant-base';
 import { FormCheckboxControl } from '@angular/forms/signals';
 import { buildVariantClasses } from '../../utils/style-variants';
 
+/** Styled checkbox. Use `[(checked)]` or bind it to a Signal Forms field. */
 @Component({
   imports: [],
   selector: 'app-checkbox',

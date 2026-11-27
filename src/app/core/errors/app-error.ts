@@ -1,3 +1,4 @@
+/** The app's standard error. HTTP errors are converted to it by errorInterceptor. */
 export class AppError extends Error {
   /** Indicates if the error was handled to prevent duplicate notifications or logs. */
   private handled = false;

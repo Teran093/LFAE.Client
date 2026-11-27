@@ -1,6 +1,7 @@
 import { Service } from '@angular/core';
 import { AppError } from '../errors/app-error';
 
+/** Writes errors to the console: expected errors as warnings, bugs as errors. */
 @Service()
 export class LoggerService {
   public logError(error: unknown): void {

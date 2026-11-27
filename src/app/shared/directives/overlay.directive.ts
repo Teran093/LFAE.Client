@@ -22,6 +22,12 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { filter, fromEvent } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+/**
+ * Shows a template in a floating panel (dropdown, menu, popover) attached to the host element.
+ * Wraps the Angular CDK Overlay and adds open/close transitions, hover mode and keyboard support.
+ *
+ * Usage: <button [appOverlay]="menuTpl">Open</button> <ng-template #menuTpl>...</ng-template>
+ */
 @Directive({
   selector: '[appOverlay]',
   host: {
@@ -40,25 +46,34 @@ export class OverlayDirective implements OnDestroy {
   private vcr = inject(ViewContainerRef);
   private destroyRef = inject(DestroyRef);
 
+  /** Template to show. Without a template, the directive does nothing. */
   public appOverlay = input<TemplateRef<unknown>>();
   public overlayWidth = input<string>('fit-content');
   public overlayHeight = input<string>('auto');
+  /** Side of the host where the panel opens. `global*` positions are relative to the window. */
   public position = input<OverlayPosition>('auto');
   public scrollBehaviour = input<OverlayScrollBehaviour>('repositionAutoClose');
+  /** Alignment of the panel along the chosen side (e.g. left-aligned below the host). */
   public orientation = input<OverlayOrientation>('auto');
+  /** Opens on mouse hover instead of on click. Touch devices still use click. */
   public enabledOnHover = input<boolean>(false);
+  /** Gap in px between the host and the panel. */
   public overlayOffset = input<number>(4);
+  /** Distance from the window edges, for `global*` positions. */
   public globalOffset = input<string>();
+  /** Hover delays in ms, so the panel doesn't flicker when the mouse passes by. */
   public enterDelay = input<number>(100);
   public leaveDelay = input<number>(200);
+  /** CSS classes added to the panel. */
   public overlayClasses = input<string | string[]>('rounded');
-  // Transition properties
+  // Transition properties (Tailwind classes)
   public enableTransition = input<boolean>(true);
   public transitionClasses = input<string>('transition ease-out duration-200');
   public enterFromClass = input<string>('opacity-0 scale-95');
   public enterToClass = input<string>('opacity-100 scale-100');
   public leaveFromClass = input<string>('opacity-100 scale-100');
   public leaveToClass = input<string>('opacity-0 scale-95');
+  /** Max wait for the leave transition, in case `transitionend` never fires. */
   public transitionFallbackMs = input<number>(300);
 
   public readonly isOpen = signal<boolean>(false);
@@ -66,8 +81,10 @@ export class OverlayDirective implements OnDestroy {
   /** True from the start of the leave animation until the overlay is detached. */
   public readonly isClosing = signal<boolean>(false);
 
+  /** Created on the first open and reused afterwards. */
   private overlayRef?: OverlayRef;
   private hoverTimer?: ReturnType<typeof setTimeout>;
+  /** Classes currently on the panel, so they can be removed when `overlayClasses` changes. */
   private currentClasses: string | string[] = [];
 
   private get isGlobal(): boolean {
@@ -82,6 +99,7 @@ export class OverlayDirective implements OnDestroy {
   }
 
   constructor() {
+    // Apply input changes to the panel if it already exists
     effect(() => {
       const width = this.overlayWidth();
       const height = this.overlayHeight();
@@ -117,6 +135,7 @@ export class OverlayDirective implements OnDestroy {
       return;
     }
     const pointerType = ev instanceof PointerEvent ? ev.pointerType : undefined;
+    // In hover mode the mouse already opens it; clicks only matter for touch and keyboard
     if (this.enabledOnHover() && pointerType === 'mouse') {
       return;
     }
@@ -165,6 +184,7 @@ export class OverlayDirective implements OnDestroy {
       });
       this.currentClasses = this.overlayClasses();
 
+      // Keep the panel open while the mouse is over it (hover mode)
       fromEvent(this.overlayRef.overlayElement, 'mouseenter')
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => this.onMouseEnter());
@@ -173,6 +193,7 @@ export class OverlayDirective implements OnDestroy {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => this.onMouseLeave());
 
+      // Close on clicks outside the panel. Clicks on the host are ignored: they already toggle it.
       this.overlayRef
         .outsidePointerEvents()
         .pipe(
@@ -186,6 +207,7 @@ export class OverlayDirective implements OnDestroy {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((ev) => {
           if (ev.code === 'Escape') {
+            // Return focus to the host so keyboard users don't lose their place
             const focusWasInside = this.overlayRef!.overlayElement.contains(document.activeElement);
             this.close();
             if (focusWasInside) {
@@ -218,12 +240,9 @@ export class OverlayDirective implements OnDestroy {
   }
 
   /**
-   * Computes the transform-origin by comparing the REAL position of the already rendered
-   * overlay (getBoundingClientRect) against the trigger, instead of relying on an
-   * asynchronous event like `positionChanges`. Since `positionStrategy.apply()` runs
-   * synchronously inside `overlayRef.attach()` before `attachments()` emits, the DOM is
-   * already in its final position when this runs — even on the first `open()` — so there
-   * is no race condition.
+   * Returns the CSS transform-origin, so the panel grows from the side closest to the host.
+   * It measures the panel's real position instead of using CDK's async `positionChanges`:
+   * CDK positions the panel synchronously inside `attach()`, so the DOM is already final here.
    */
   private getTransformOrigin(): string {
     const el = this.overlayRef?.overlayElement;
@@ -260,15 +279,11 @@ export class OverlayDirective implements OnDestroy {
     const from = this.enterFromClass().split(' ').filter(Boolean);
     const to = this.enterToClass().split(' ').filter(Boolean);
 
-    // Hide immediately (same tick as the attach, with no transition class yet) so the user
-    // never sees the intermediate/mispositioned state of the first render.
+    // Hide it right away, so the user never sees the first, possibly misplaced, render
     el.classList.add(...from);
 
-    // The content (ng-content inside the ng-template) may not have its final layout resolved
-    // yet in the same tick as attach(). We force CDK to re-measure and re-position with the
-    // real, stable size before capturing the transform-origin and starting the transition.
-    // Without this, on the first open CDK can position using a slightly different measurement
-    // than the final one, and that adjustment shows up as a jump/drop.
+    // On the first open the content may not have its final size yet. Wait one frame and
+    // reposition, otherwise the panel visibly jumps when the transition starts.
     requestAnimationFrame(() => {
       this.overlayRef?.updatePosition();
 
@@ -281,6 +296,7 @@ export class OverlayDirective implements OnDestroy {
 
         const base = this.transitionClasses().split(' ').filter(Boolean);
         el.classList.add(...base);
+        // Reading offsetHeight forces a reflow, so the browser animates the next class change
         void el.offsetHeight;
         requestAnimationFrame(() => {
           el.classList.remove(...from);
@@ -305,6 +321,7 @@ export class OverlayDirective implements OnDestroy {
     const from = this.leaveFromClass().split(' ').filter(Boolean);
     const to = this.leaveToClass().split(' ').filter(Boolean);
 
+    // Detach when the transition ends, or after the fallback timeout, whichever comes first
     let done = false;
     const finish = () => {
       if (done) {
@@ -346,6 +363,7 @@ export class OverlayDirective implements OnDestroy {
     this.scheduleHover(false);
   }
 
+  /** Opens or closes after a delay. A new call cancels the pending one. */
   private scheduleHover(shouldOpen: boolean) {
     clearTimeout(this.hoverTimer);
     this.hoverTimer = setTimeout(
@@ -403,11 +421,16 @@ export class OverlayDirective implements OnDestroy {
     }
   }
 
+  /**
+   * Candidate positions next to the host, in order of preference.
+   * CDK uses the first one that fits in the window.
+   */
   private getConnectedPositions(): ConnectedPosition[] {
     const position = this.position() as ConnectedOverlayPosition | 'auto';
     const orientation = this.orientation();
     const offset = this.overlayOffset();
 
+    // Each side has 3 alignments, always in this order: center, start, end
     const overlayPositions: Record<ConnectedOverlayPosition, ConnectedPosition[]> = {
       bottom: [
         {
@@ -509,6 +532,7 @@ export class OverlayDirective implements OnDestroy {
     return result;
   }
 
+  /** Index of the orientation inside each side's list in `overlayPositions`. */
   private getOrientationIndex(orientation: Exclude<OverlayOrientation, 'auto'>): number {
     switch (orientation) {
       case 'center':

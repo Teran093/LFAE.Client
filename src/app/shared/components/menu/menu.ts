@@ -2,6 +2,7 @@ import { Component, input, output, signal } from '@angular/core';
 import { MenuOption } from './menu-option';
 import { OverlayDirective } from '../../directives/overlay.directive';
 
+/** List of options. Options with children open a nested Menu on hover. */
 @Component({
   imports: [OverlayDirective],
   selector: 'app-menu',
@@ -10,9 +11,11 @@ import { OverlayDirective } from '../../directives/overlay.directive';
 })
 export class Menu {
   public menuOptions = input.required<MenuOption[]>();
+  /** Emits the clicked option, including options from nested submenus. */
   public selected = output<MenuOption>();
   public placeholder = input<string>();
 
+  /** Option whose submenu is open. */
   protected activeChild = signal<MenuOption | undefined>(undefined);
   protected activeChildOptions = signal<MenuOption[] | undefined>(undefined);
 

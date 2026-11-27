@@ -3,6 +3,7 @@ import { LoggerService } from '../services/logger.service';
 import { NotificationService } from '../services/notification.service';
 import { AppError } from './app-error';
 
+/** Catches every uncaught error: logs it and shows a message to the user. */
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
   private logger = inject(LoggerService);

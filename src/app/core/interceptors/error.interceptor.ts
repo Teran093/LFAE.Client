@@ -2,6 +2,7 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { AppError } from '../errors/app-error';
 
+/** Converts every failed HTTP request into an AppError, so the app handles one error type. */
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: unknown) => {
@@ -36,6 +37,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   );
 };
 
+/** Fallback error code when the backend response has no `code`. */
 function mapHttpStatusToCode(status: number): string {
   switch (status) {
     case 400:

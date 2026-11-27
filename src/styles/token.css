@@ -1,4 +1,4 @@
-/* tokens.css */
+/* Design tokens: brand colors and fonts. Tailwind turns each one into utility classes. */
 @theme {
   /*
    * Fonts. Tailwind applies --font-sans to the whole page by default,

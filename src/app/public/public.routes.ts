@@ -22,7 +22,7 @@ export const PUBLIC_ROUTES: Routes = [
         path: 'churches',
         loadComponent: () =>
           import('../public/pages/churches-page/churches-page').then((m) => m.ChurchesPage),
-        title: 'Curches | Life for All Europe',
+        title: 'Churches | Life for All Europe',
       },
       {
         path: 'ceape',

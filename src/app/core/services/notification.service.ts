@@ -2,10 +2,12 @@ import { inject, PLATFORM_ID, Service } from '@angular/core';
 import { ERROR_I18N_KEYS } from '../errors/app-error';
 import { isPlatformBrowser } from '@angular/common';
 
+/** Shows messages to the user. Currently uses `alert`, until a toast library is added. */
 @Service()
 export class NotificationService {
   private readonly platformId = inject(PLATFORM_ID);
 
+  /** Shows the translated message for an error code, or `fallbackMessage` if it has none. */
   public showErrorByCode(errorCode: string, fallbackMessage?: string): void {
     const i18nKey = ERROR_I18N_KEYS[errorCode] || 'ERRORS.UNKNOWN';
     // TODO: Integrate with a real i18n library (Transloco, ngx-translate, etc.) to fetch the translated message.
@@ -19,6 +21,7 @@ export class NotificationService {
   }
 
   private displayToast(message: string): void {
+    // `alert` doesn't exist on the server (SSR), so only log there
     if (!isPlatformBrowser(this.platformId)) {
       console.error(`[Notificación]: ${message}`);
       return;

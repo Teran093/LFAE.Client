@@ -18,14 +18,14 @@ import { CUSTOM_ICON_LIST, CustomIconName } from '../models/custom-icon-list';
 
 /**
  * Renders an icon inside any element. Two sources are supported:
- *  - ng-icons library: a key of NG_ICON_LIST (e.g. "bootstrapClock").
- *  - Custom SVGs bundled with the app: a key of CUSTOM_ICON_LIST (e.g. "church-logo").
+ *  - ng-icons library: a key of NG_ICON_LIST (e.g. "lucideHome").
+ *  - Custom SVGs bundled with the app: a key of CUSTOM_ICON_LIST (e.g. "spanishLanguageIcon").
  *
  * If a name exists in both lists, the library icon wins.
  *
  * Usage:
- *   <span appIcon="bootstrapClock"></span>
- *   <span appIcon="church-logo" [size]="32" class="text-primary"></span>
+ *   <span appIcon="lucideHome"></span>
+ *   <span appIcon="spanishLanguageIcon" [size]="32" class="text-primary"></span>
  *
  * Icons inherit the text color (currentColor). Custom SVGs need a viewBox and should use
  * fill/stroke="currentColor" instead of hardcoded colors to follow the text color.
@@ -64,6 +64,7 @@ export class IconDirective {
   constructor() {
     inject(DestroyRef).onDestroy(() => this.clear());
 
+    // Runs only in the browser: rendering icons during SSR throws errors
     afterRenderEffect(() => {
       const name = this.appIcon();
       const size = this.cssSize();

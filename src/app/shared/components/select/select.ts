@@ -16,6 +16,10 @@ import { buildVariantClasses } from '../../utils/style-variants';
 import { VariantBase } from '../../bases/variant-base';
 import { Align } from '../../models/variants.types';
 
+/**
+ * Dropdown select. Options are `<app-select-option>` children.
+ * Use `[(value)]` or bind it to a Signal Forms field.
+ */
 @Component({
   imports: [OverlayDirective, IconDirective],
   selector: 'app-select',
@@ -23,17 +27,16 @@ import { Align } from '../../models/variants.types';
   templateUrl: './select.html',
 })
 export class Select<T> extends VariantBase implements FormValueControl<T | undefined> {
-  // Options list
   protected selectOptions = contentChildren(SelectOption);
 
   // The trigger shares its look with Button (see styles/controls.css)
   protected readonly prefix = 'ctrl';
 
-  // Inputs
   public value = model<T | undefined>();
   public placeholder = input<string>('Select an option...');
   /** Horizontal alignment of the content of each option. */
   public align = input<Align>('start');
+  /** Gap in px between the trigger and the menu. */
   public menuOffset = input<number>(4);
 
   protected currentOption = signal<SelectOption<T> | undefined>(undefined);
@@ -70,6 +73,7 @@ export class Select<T> extends VariantBase implements FormValueControl<T | undef
   constructor() {
     super();
 
+    // Keep the displayed option in sync with `value`. An unknown value resets it to empty.
     effect(() => {
       const options = this.selectOptions();
       if (options.length === 0) {
@@ -82,6 +86,8 @@ export class Select<T> extends VariantBase implements FormValueControl<T | undef
       }
     });
 
+    // Connect each option to this Select and listen to its clicks.
+    // Runs again when the options change, removing the old subscriptions first.
     effect((onCleanup) => {
       if (this.selectOptions().length === 0) {
         return;

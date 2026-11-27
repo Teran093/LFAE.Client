@@ -117,6 +117,17 @@ Services use `httpResource` for reads and `HttpClient` for writes, then call `.r
 - Prettier: `printWidth: 100`, Angular parser for HTML.
 - All code comments, JSDoc and UI text MUST be in English, even when the conversation with the developer is in another language.
 
+### Comments
+
+Comments MUST be short and concise: one line in most cases. The reader to write for is a junior developer with about one year of experience.
+
+- Explain **why** or **what for**, not what the code literally does. `// Increment i` is noise; `// Clicks inside the menu are not "outside clicks", so close it manually` is useful.
+- Add a one-line `/** ... */` to every exported class, service, directive and component, and to inputs, outputs and public methods whose purpose isn't obvious from the name.
+- Don't comment obvious code, and don't repeat the type or the name.
+- **Exception:** a longer comment (a few lines) is allowed only when the code would confuse that junior developer: timing tricks (`requestAnimationFrame`, forced reflows), SSR or browser-only workarounds, CDK internals, or non-obvious business rules. Even then, keep it as short as it can be.
+- When code changes, update or delete the comment that describes it. A wrong comment is worse than none.
+- Format TODOs as `// TODO: <what is missing>`.
+
 ---
 
 You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.

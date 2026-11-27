@@ -14,15 +14,18 @@ import { AppError } from '../../../core/errors/app-error';
   styleUrl: './dashboard-home-page.css',
   templateUrl: './dashboard-home-page.html',
 })
+/** Dashboard start page. For now it only manages the site languages. */
 export class DashboardHomePage {
   private readonly lang = inject(LanguageService);
   protected readonly languages = this.lang.languages;
 
   protected readonly selectedLangCode = signal<string | undefined>(undefined);
+  /** The selected language's data, with the settings being edited. */
   protected readonly currentLang = computed(() =>
     this.languages.value().find((language) => language.code === this.selectedLangCode()),
   );
 
+  /** Flag icon for each language code. */
   public readonly langIcons: Record<string, AppIconName> = {
     en: 'englishLanguageIcon' as AppIconName,
     es: 'spanishLanguageIcon' as AppIconName,
@@ -32,6 +35,7 @@ export class DashboardHomePage {
     fr: 'frenchLanguageIcon' as AppIconName,
   };
 
+  /** Saves the selected language's settings. */
   protected languageConfigChanged() {
     const language = this.currentLang();
 

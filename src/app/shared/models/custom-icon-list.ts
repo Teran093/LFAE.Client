@@ -6,10 +6,9 @@ import italianLanguageIcon from '../icons/language-icon-it.svg';
 import frenchLanguageIcon from '../icons/language-icon-fr.svg';
 
 /**
- * TODO: Incorrect comment
- * Custom SVG icons bundled with the app. The key is the name used in the template:
+ * Custom SVG icons bundled with the app. The key is the name used in templates:
  *   <span appIcon="englishLanguageIcon"></span>
- * Use kebab-case keys so they never clash with the camelCase keys of NG_ICON_LIST.
+ * Keys must not match a key of NG_ICON_LIST: if they do, the library icon wins.
  */
 export const CUSTOM_ICON_LIST = {
   englishLanguageIcon,

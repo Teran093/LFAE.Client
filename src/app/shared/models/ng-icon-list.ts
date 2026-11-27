@@ -6,6 +6,10 @@ import { tablerSearch } from '@ng-icons/tabler-icons';
 import { lucideKey } from '@ng-icons/lucide';
 import { lucideHome } from '@ng-icons/lucide';
 
+/**
+ * ng-icons available to the appIcon directive. Only the icons listed here are bundled,
+ * so import and add an icon before using it in a template.
+ */
 export const NG_ICON_LIST = {
   // Phosphor icons
   phosphorEmpty,
