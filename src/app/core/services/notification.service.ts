@@ -1,8 +1,11 @@
-import { Service } from '@angular/core';
+import { inject, PLATFORM_ID, Service } from '@angular/core';
 import { ERROR_I18N_KEYS } from '../errors/app-error';
+import { isPlatformBrowser } from '@angular/common';
 
 @Service()
 export class NotificationService {
+  private readonly platformId = inject(PLATFORM_ID);
+
   public showErrorByCode(errorCode: string, fallbackMessage?: string): void {
     const i18nKey = ERROR_I18N_KEYS[errorCode] || 'ERRORS.UNKNOWN';
     // TODO: Integrate with a real i18n library (Transloco, ngx-translate, etc.) to fetch the translated message.
@@ -16,6 +19,11 @@ export class NotificationService {
   }
 
   private displayToast(message: string): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      console.error(`[Notificación]: ${message}`);
+      return;
+    }
+
     // TODO: Replace this with a real toast/notification library (e.g., Angular Material Snackbar, ngx-toastr, etc.)
     alert(`[Notificación]: ${message}`);
   }

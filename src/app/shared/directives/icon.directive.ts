@@ -1,13 +1,14 @@
 import {
+  afterRenderEffect,
   ComponentRef,
   computed,
   DestroyRef,
   Directive,
-  effect,
   ElementRef,
   inject,
   Injector,
   input,
+  Renderer2,
   untracked,
   ViewContainerRef,
 } from '@angular/core';
@@ -55,6 +56,7 @@ export class IconDirective {
 
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly viewContainer = inject(ViewContainerRef);
+  private readonly renderer = inject(Renderer2);
   private readonly injector = inject(Injector);
 
   private libraryRef?: ComponentRef<NgIcon>;
@@ -62,7 +64,7 @@ export class IconDirective {
   constructor() {
     inject(DestroyRef).onDestroy(() => this.clear());
 
-    effect(() => {
+    afterRenderEffect(() => {
       const name = this.appIcon();
       const size = this.cssSize();
 
@@ -94,7 +96,7 @@ export class IconDirective {
     this.libraryRef = componentRef;
   }
 
-  private renderCustomIcon(name: CustomIconName): void {
+  private renderCustomIcon(name: CustomIconName) {
     // The SVG is bundled at build time from our own files, so it is trusted markup
     this.el.innerHTML = CUSTOM_ICON_LIST[name];
 
@@ -107,7 +109,10 @@ export class IconDirective {
   private clear(): void {
     this.libraryRef?.destroy();
     this.libraryRef = undefined;
-    this.el.replaceChildren();
+
+    while (this.el.firstChild) {
+      this.renderer.removeChild(this.el, this.el.firstChild);
+    }
   }
 }
 
