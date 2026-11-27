@@ -167,9 +167,6 @@ export class OverlayDirective implements OnDestroy {
     if (!template || this.isOpen()) {
       return;
     }
-    if (this.isOpen()) {
-      return;
-    }
     if (!this.overlayRef) {
       this.overlayRef = this.cdkOverlay.create({
         scrollStrategy: this.getScrollStrategy(),
