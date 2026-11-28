@@ -16,3 +16,12 @@ body {
   /* Prevent overscroll propagation and pull-to-refresh */
   overscroll-behavior: contain;
 }
+
+/* No page transition animation for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
