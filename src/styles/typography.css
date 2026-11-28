@@ -41,6 +41,6 @@
   }
 
   ::selection {
-    background-color: color-mix(in srgb, var(--color-tertiary) 35%, transparent);
+    background-color: color-mix(in srgb, var(--color-tertiary-light) 35%, transparent);
   }
 }

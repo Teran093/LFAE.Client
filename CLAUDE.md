@@ -21,16 +21,16 @@ Life For All Europe (LFAE) is an evangelical Christian ministry with churches in
 
 Public area (`public/`, routes under `/`):
 
-| Page | Route | Purpose |
-| --- | --- | --- |
-| Home | `/` | Landing page for the ministry. |
-| Churches | `/churches` | List of the ministry's churches with an interactive **Leaflet** map. |
-| Events | `/events` | Ministry events (rarely, events of a single church). |
-| Offerings | not created yet | How to give or donate to the ministry. |
-| Resources | `/resources` | Downloadable material, such as the ministry's brand identity. |
-| About Us | `/about` | Who the ministry is. |
-| CEAPE | `/ceape` | A ministry project. Out of scope for now: don't build it unless asked. |
-| Photo Gallery | `/photos` | Photos organized in folders that come from the ministry's Google Drive. |
+| Page          | Route           | Purpose                                                                 |
+| ------------- | --------------- | ----------------------------------------------------------------------- |
+| Home          | `/`             | Landing page for the ministry.                                          |
+| Churches      | `/churches`     | List of the ministry's churches with an interactive **Leaflet** map.    |
+| Events        | `/events`       | Ministry events (rarely, events of a single church).                    |
+| Offerings     | not created yet | How to give or donate to the ministry.                                  |
+| Resources     | `/resources`    | Downloadable material, such as the ministry's brand identity.           |
+| About Us      | `/about`        | Who the ministry is.                                                    |
+| CEAPE         | `/ceape`        | A ministry project. Out of scope for now: don't build it unless asked.  |
+| Photo Gallery | `/photos`       | Photos organized in folders that come from the ministry's Google Drive. |
 
 Dashboard (`dashboard/`, routes under `/dashboard`, auth required):
 
@@ -106,6 +106,7 @@ Services use `httpResource` for reads and `HttpClient` for writes, then call `.r
 
 - **Variant components** (`app-button`, `app-select`, `app-checkbox`, …) extend [VariantBase](src/app/shared/bases/variant-base.ts). It provides the `disabled`, `variant` (`primary|secondary|tertiary|surface`), `size`, `rounded` and `outline` inputs, plus `iconSize`. Build class lists with `buildVariantClasses({ ...this.variantConfig(), prefix: this.prefix, ... })` from [style-variants.ts](src/app/shared/utils/style-variants.ts). This yields `{prefix}-base role-{style} [{prefix}-outline] {prefix}-size-{size} rounded-*`.
 - **Styling layers** (imported in order in [styles.css](src/styles.css)): `token.css` (Tailwind `@theme` colors and fonts; Manrope = `font-display`, Fira Sans = `font-sans`), `base`, `typography`, `components`, `utilities`, `roles.css` (`.role-*` classes set `--role-bg/-text/-border/-accent/...`), `controls.css` (`.ctrl-*` styles for button-like controls). To add a color role, add one block to `roles.css`; components read only `--role-*` variables.
+- **Color roles and contrast:** every role meets WCAG AA (4.5:1) for its text. `surface` is a light control for dark backgrounds (navy navbar, hero), not for light pages. Gold: `tertiary` passes AA as a background for light text and as text on light backgrounds; `tertiary-light` is for decoration only (lines, icons, highlights), never for text or controls.
 - **Icons**: use `<span appIcon="name" [size]="16"></span>` ([icon.directive.ts](src/app/shared/directives/icon.directive.ts)). Library icons must be registered in [ng-icon-list.ts](src/app/shared/models/ng-icon-list.ts) (Phosphor, Lucide, Tabler, Simple Icons). Custom SVGs go in `shared/icons/`, imported as text in [custom-icon-list.ts](src/app/shared/models/custom-icon-list.ts) (esbuild `.svg` loader plus [svg.d.ts](src/svg.d.ts)). SVGs should use `currentColor`.
 - **Overlays**: `[appOverlay]="templateRef"` ([overlay.directive.ts](src/app/shared/directives/overlay.directive.ts)) wraps CDK Overlay for menus, selects and popovers. It supports click or hover, positioning, Escape/outside-click close, focus return and enter/leave transitions.
 

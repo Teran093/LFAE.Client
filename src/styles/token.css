@@ -10,8 +10,12 @@
   /* Base */
   --color-primary: oklch(30.2% 0.043 231.5); /* #153240 */
   --color-secondary: oklch(43% 0.055 220); /* #295765 */
-  --color-tertiary: oklch(65% 0.085 80); /* #AA8951 */
+  /* Gold dark enough for light text on it and for text on light backgrounds (4.6:1, WCAG AA) */
+  --color-tertiary: oklch(55% 0.085 80); /* #8C6C33 */
   --color-surface: oklch(97.8% 0.002 145.6); /* #F7F8F7 */
+
+  /* Lighter gold for decoration only (lines, icons, highlights). Never for text or controls */
+  --color-tertiary-light: oklch(65% 0.085 80); /* #AA8951 */
 
   /* Text color of the page. It is a token of its own so dark mode can change it. */
   --color-ink: var(--color-primary);
@@ -19,13 +23,13 @@
   /*  Hover */
   --color-primary-hover: oklch(27.5% 0.043 231.5); /* #0E2B39 */
   --color-secondary-hover: oklch(38% 0.055 220); /* #1A4957 */
-  --color-tertiary-hover: oklch(60% 0.085 80); /* #9B7A42 */
+  --color-tertiary-hover: oklch(50% 0.085 80); /* #7D5D23 */
   --color-surface-hover: oklch(94% 0.004 145.6); /* #E9ECE9 */
 
   /* Active */
   --color-primary-active: oklch(25% 0.043 231.5); /* #072533 */
   --color-secondary-active: oklch(33% 0.055 220); /* #093C49 */
-  --color-tertiary-active: oklch(55% 0.085 80); /* #8C6C33 */
+  --color-tertiary-active: oklch(45% 0.085 80); /* #6E4F11 */
   --color-surface-active: oklch(90% 0.006 145.6); /* #DCDFDC */
 
   /* Option A — gold + sage */
