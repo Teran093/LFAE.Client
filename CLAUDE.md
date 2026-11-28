@@ -1,5 +1,9 @@
 # LFAE.Client
 
+<!-- TEMPORARY (dev-astro-angular-migration branch only): remove this line before merging into main -->
+
+@MIGRATION.md
+
 Angular 22 front end for **Life For All Europe (LFAE)**. It uses SSR with hydration (`@angular/ssr` + Express), Tailwind CSS v4, Angular CDK and `@ng-icons`. The backend is a separate Spring Boot API, reached through `/api/**`.
 
 ## Product context
@@ -21,16 +25,16 @@ Life For All Europe (LFAE) is an evangelical Christian ministry with churches in
 
 Public area (`public/`, routes under `/`):
 
-| Page | Route | Purpose |
-| --- | --- | --- |
-| Home | `/` | Landing page for the ministry. |
-| Churches | `/churches` | List of the ministry's churches with an interactive **Leaflet** map. |
-| Events | `/events` | Ministry events (rarely, events of a single church). |
-| Offerings | not created yet | How to give or donate to the ministry. |
-| Resources | `/resources` | Downloadable material, such as the ministry's brand identity. |
-| About Us | `/about` | Who the ministry is. |
-| CEAPE | `/ceape` | A ministry project. Out of scope for now: don't build it unless asked. |
-| Photo Gallery | `/photos` | Photos organized in folders that come from the ministry's Google Drive. |
+| Page          | Route           | Purpose                                                                 |
+| ------------- | --------------- | ----------------------------------------------------------------------- |
+| Home          | `/`             | Landing page for the ministry.                                          |
+| Churches      | `/churches`     | List of the ministry's churches with an interactive **Leaflet** map.    |
+| Events        | `/events`       | Ministry events (rarely, events of a single church).                    |
+| Offerings     | not created yet | How to give or donate to the ministry.                                  |
+| Resources     | `/resources`    | Downloadable material, such as the ministry's brand identity.           |
+| About Us      | `/about`        | Who the ministry is.                                                    |
+| CEAPE         | `/ceape`        | A ministry project. Out of scope for now: don't build it unless asked.  |
+| Photo Gallery | `/photos`       | Photos organized in folders that come from the ministry's Google Drive. |
 
 Dashboard (`dashboard/`, routes under `/dashboard`, auth required):
 
