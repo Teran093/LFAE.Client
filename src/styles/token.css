@@ -10,12 +10,18 @@
   /* Base */
   --color-primary: oklch(30.2% 0.043 231.5); /* #153240 */
   --color-secondary: oklch(43% 0.055 220); /* #295765 */
-  /* Gold dark enough for light text on it and for text on light backgrounds (4.6:1, WCAG AA) */
+  /* Gold for light backgrounds: as text, border or button fill (4.6:1, WCAG AA) */
   --color-tertiary: oklch(55% 0.085 80); /* #8C6C33 */
   --color-surface: oklch(97.8% 0.002 145.6); /* #F7F8F7 */
 
-  /* Lighter gold for decoration only (lines, icons, highlights). Never for text or controls */
-  --color-tertiary-light: oklch(65% 0.085 80); /* #AA8951 */
+  /* Gold for dark backgrounds: text and accents on navy (6:1). Too light for light backgrounds */
+  --color-tertiary-light: oklch(75% 0.1 80); /* #CFA761 */
+
+  /* Status colors (errors, confirmations). Text on light backgrounds or light text on them, 5.3:1+ */
+  --color-danger: oklch(52% 0.19 27); /* #BE2323 */
+  --color-danger-soft: oklch(97% 0.02 27); /* #FFF0EE, alert background */
+  --color-success: oklch(50% 0.12 150); /* #21763C */
+  --color-success-soft: oklch(97% 0.03 150); /* #E8FBEB, alert background */
 
   /* Text color of the page. It is a token of its own so dark mode can change it. */
   --color-ink: var(--color-primary);

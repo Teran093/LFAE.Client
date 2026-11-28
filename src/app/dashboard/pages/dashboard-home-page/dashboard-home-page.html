@@ -10,7 +10,7 @@
           <p>Loading languages...</p>
         </div>
       } @else if (languages.error()) {
-        <div class="flex p-2 border-l-4 bg-red-50 border-red-700">
+        <div class="flex p-2 border-l-4 bg-danger-soft border-danger">
           <p>Languages couldn't be loaded</p>
         </div>
         <app-button (clicked)="languages.reload()">Retry</app-button>
