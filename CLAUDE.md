@@ -21,16 +21,16 @@ Life For All Europe (LFAE) is an evangelical Christian ministry with churches in
 
 Public area (`public/`, routes under `/`):
 
-| Page | Route | Purpose |
-| --- | --- | --- |
-| Home | `/` | Landing page for the ministry. |
-| Churches | `/churches` | List of the ministry's churches with an interactive **Leaflet** map. |
-| Events | `/events` | Ministry events (rarely, events of a single church). |
-| Offerings | not created yet | How to give or donate to the ministry. |
-| Resources | `/resources` | Downloadable material, such as the ministry's brand identity. |
-| About Us | `/about` | Who the ministry is. |
-| CEAPE | `/ceape` | A ministry project. Out of scope for now: don't build it unless asked. |
-| Photo Gallery | `/photos` | Photos organized in folders that come from the ministry's Google Drive. |
+| Page          | Route           | Purpose                                                                 |
+| ------------- | --------------- | ----------------------------------------------------------------------- |
+| Home          | `/`             | Landing page for the ministry.                                          |
+| Churches      | `/churches`     | List of the ministry's churches with an interactive **Leaflet** map.    |
+| Events        | `/events`       | Ministry events (rarely, events of a single church).                    |
+| Offerings     | not created yet | How to give or donate to the ministry.                                  |
+| Resources     | `/resources`    | Downloadable material, such as the ministry's brand identity.           |
+| About Us      | `/about`        | Who the ministry is.                                                    |
+| CEAPE         | `/ceape`        | A ministry project. Out of scope for now: don't build it unless asked.  |
+| Photo Gallery | `/photos`       | Photos organized in folders that come from the ministry's Google Drive. |
 
 Dashboard (`dashboard/`, routes under `/dashboard`, auth required):
 
@@ -109,6 +109,32 @@ Services use `httpResource` for reads and `HttpClient` for writes, then call `.r
 - **Icons**: use `<span appIcon="name" [size]="16"></span>` ([icon.directive.ts](src/app/shared/directives/icon.directive.ts)). Library icons must be registered in [ng-icon-list.ts](src/app/shared/models/ng-icon-list.ts) (Phosphor, Lucide, Tabler, Simple Icons). Custom SVGs go in `shared/icons/`, imported as text in [custom-icon-list.ts](src/app/shared/models/custom-icon-list.ts) (esbuild `.svg` loader plus [svg.d.ts](src/svg.d.ts)). SVGs should use `currentColor`.
 - **Overlays**: `[appOverlay]="templateRef"` ([overlay.directive.ts](src/app/shared/directives/overlay.directive.ts)) wraps CDK Overlay for menus, selects and popovers. It supports click or hover, positioning, Escape/outside-click close, focus return and enter/leave transitions.
 
+### Animation and carousels
+
+Pick the tool by the kind of motion:
+
+| Motion                                                                                | Tool                                                                                                     |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Scroll-driven or sequenced (reveals, parallax, pinned sections, hero intro, counters) | **GSAP** + ScrollTrigger, through `injectGsap()`                                                         |
+| Hover and focus micro-interactions                                                    | Tailwind `transition-*` utilities, with `motion-reduce:` variants                                        |
+| Elements entering or leaving (`@if`, `@for`)                                          | Angular `animate.enter` / `animate.leave`. Never `@angular/animations`: it is deprecated                 |
+| Page-to-page navigation                                                               | View Transitions, already enabled with `withViewTransitions()` in [app.config.ts](src/app/app.config.ts) |
+| Carousels and sliders                                                                 | **Embla**, through the `emblaCarousel` directive of `embla-carousel-angular`                             |
+
+**GSAP rules:**
+
+- Always go through `injectGsap()` from [gsap.ts](src/app/shared/utils/gsap.ts), called in the component's constructor. Never import `gsap` statically: `injectGsap()` loads it lazily and keeps it out of the initial bundle. It also runs only in the browser, skips everything when the user prefers reduced motion, scopes selectors to the component and reverts on destroy.
+- In this app the **window never scrolls**: each page scrolls inside its own container. `injectGsap()` sets that container as the ScrollTrigger scroller, so don't pass `scroller` yourself.
+- Content must be visible without animation (SSR, reduced motion, no JS). Animate **from** hidden with `gsap.from()`. Never hide content with CSS or `opacity-0` classes waiting for GSAP to reveal it.
+- Don't animate the LCP element (the hero heading or main image): it delays the page's first paint.
+- A ScrollTrigger whose `start` is never reached stays hidden forever. Near the end of a page (e.g. a footer) the container may not scroll far enough for a start like `'top 80%'`: keep the default `'top bottom'` there.
+- Spend motion where it matters: one memorable moment (e.g. the hero) and subtle reveals elsewhere. The same fade-and-slide-up on every section reads as generic.
+- The `gsap-*` skills in `.claude/skills/` document the API. Their examples use React or Vue: in Angular, `injectGsap()` replaces `useGSAP()`.
+
+**Carousel rules:** no autoplay (WCAG 2.2.2), visible previous/next buttons (`app-button`) and keyboard support, not only swipe gestures. Slides render as a normal list on the server; Embla starts in the browser.
+
+**Don't add:** smooth-scroll libraries such as Lenis (they hijack native scrolling, which confuses older users and keyboard users), AOS or Rellax (abandoned).
+
 ### Conventions
 
 - The CLI schematics put files in fixed places: components in `shared/components`, services, guards, interceptors and models in `core/`, directives and pipes in `shared/`. Page and layout components go under their feature folder (`public/`, `dashboard/`). Filenames have no `.component` suffix (`button.ts`, class `Button`). Components use external `.html`/`.css` files.
@@ -127,6 +153,31 @@ Comments MUST be short and concise: one line in most cases. The reader to write 
 - **Exception:** a longer comment (a few lines) is allowed only when the code would confuse that junior developer: timing tricks (`requestAnimationFrame`, forced reflows), SSR or browser-only workarounds, CDK internals, or non-obvious business rules. Even then, keep it as short as it can be.
 - When code changes, update or delete the comment that describes it. A wrong comment is worse than none.
 - Format TODOs as `// TODO: <what is missing>`.
+
+## Skills
+
+The project ships these skills in [.claude/skills/](.claude/skills/) (sources and licenses in [SOURCES.md](.claude/skills/SOURCES.md)):
+
+- `new-page`: scaffolds a page with its route, title and SSR render mode.
+- `frontend-design`: visual direction for new or reworked UI. Brand and product rules in this file win over its defaults.
+- `accessibility`, `seo`, `core-web-vitals`: WCAG 2.2, SEO and performance audits.
+- `gsap-core`, `gsap-scrolltrigger`, `gsap-timeline`, `gsap-performance`, `gsap-plugins`: official GSAP guidance.
+
+### Recommended skills
+
+**`web-design-guidelines`** (Vercel) reviews UI code against 100+ UX and accessibility rules. It can't be included in this repository because its source has no license, so each developer installs it in their own user folder.
+
+Before doing UI work, check whether `web-design-guidelines` is among your available skills. If it isn't, tell the developer once, explain what it's for, and offer to install it with these commands (Git Bash, macOS or Linux):
+
+```bash
+git clone --depth 1 --filter=blob:none --sparse https://github.com/vercel-labs/agent-skills.git /tmp/agent-skills
+git -C /tmp/agent-skills sparse-checkout set --no-cone '/skills/web-design-guidelines/'
+mkdir -p ~/.claude/skills
+cp -r /tmp/agent-skills/skills/web-design-guidelines ~/.claude/skills/
+rm -rf /tmp/agent-skills
+```
+
+Install it only with the developer's approval. Claude Code picks it up in the next session.
 
 ---
 
