@@ -14,6 +14,12 @@ export const DASHBOARD_ROUTES: Routes = [
           ),
         title: 'Home • Dashboard | LFAE',
       },
+      // Dev-only playground to try the shared components; not part of the product
+      {
+        path: 'demo',
+        loadComponent: () => import('../dashboard/pages/demo/demo').then((m) => m.Demo),
+        title: 'Demo • Dashboard | LFAE',
+      },
     ],
   },
 ];

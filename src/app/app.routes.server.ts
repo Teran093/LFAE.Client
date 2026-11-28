@@ -15,7 +15,6 @@ export const serverRoutes: ServerRoute[] = [
 
   // Private pages that require authentication and are mostly dynamic
   { path: 'dashboard/**', renderMode: RenderMode.Client },
-  { path: 'demo', renderMode: RenderMode.Client },
 
   // Any other route (includes the 404)
   { path: '**', renderMode: RenderMode.Server },

@@ -89,7 +89,7 @@ src/
 
 - Feature areas expose a `*_ROUTES` const (`PUBLIC_ROUTES`, `DASHBOARD_ROUTES`) with a layout component and lazily loaded child pages (`loadComponent`). Every route sets a `title` (`"<Page> | Life For All Europe"`, or `"<Page> • Dashboard | LFAE"`).
 - **When you add a route, also add it to [app.routes.server.ts](src/app/app.routes.server.ts)**: `Prerender` for static pages, `Server` for pages whose content comes from the API, `Client` for the dashboard and auth-only pages.
-- `/demo` is a dev-only playground for shared components. It is not part of the product.
+- `/dashboard/demo` is a dev-only playground for shared components, reachable only from the dashboard. It is not part of the product.
 - The dashboard `authGuard` is still a TODO in [app.routes.ts](src/app/app.routes.ts).
 
 ### SSR caveats
