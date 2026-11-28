@@ -184,9 +184,8 @@ motion in **three places only**, and keep the rest still:
     load lazily. Use `object-fit: cover`.
 23. **`alt` text** describes the scene, never names people: e.g. _"Young people worshipping
     together at a conference"_. Decorative images (crowns) get `alt=""`.
-24. **Consent:** these photos show identifiable people, some of them young. Isaac must confirm the
-    ministry has their consent before the page goes live (`// TODO: confirm photo consent` next to
-    each photo). Don't add other photos of people without asking him.
+24. **Consent:** the ministry collects photo consent through a form at each of its events, so
+    these photos can be published. Don't add other photos of people without asking Isaac.
 
 ## Checklist
 
