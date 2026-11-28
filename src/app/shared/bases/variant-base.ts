@@ -15,6 +15,7 @@ export abstract class VariantBase {
   protected abstract readonly prefix: string;
 
   public disabled = input<boolean>(false);
+  /** Color role. `surface` is a light control meant for dark backgrounds (navbar, hero). */
   public variant = input<VariantStyle>('primary');
   public size = input<VariantSize>('medium');
   public rounded = input<BorderRadius>('default');

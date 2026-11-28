@@ -10,8 +10,18 @@
   /* Base */
   --color-primary: oklch(30.2% 0.043 231.5); /* #153240 */
   --color-secondary: oklch(43% 0.055 220); /* #295765 */
-  --color-tertiary: oklch(65% 0.085 80); /* #AA8951 */
+  /* Gold for light backgrounds: as text, border or button fill (4.6:1, WCAG AA) */
+  --color-tertiary: oklch(55% 0.085 80); /* #8C6C33 */
   --color-surface: oklch(97.8% 0.002 145.6); /* #F7F8F7 */
+
+  /* Gold for dark backgrounds: text and accents on navy (6:1). Too light for light backgrounds */
+  --color-tertiary-light: oklch(75% 0.1 80); /* #CFA761 */
+
+  /* Status colors (errors, confirmations). Text on light backgrounds or light text on them, 5.3:1+ */
+  --color-danger: oklch(52% 0.19 27); /* #BE2323 */
+  --color-danger-soft: oklch(97% 0.02 27); /* #FFF0EE, alert background */
+  --color-success: oklch(50% 0.12 150); /* #21763C */
+  --color-success-soft: oklch(97% 0.03 150); /* #E8FBEB, alert background */
 
   /* Text color of the page. It is a token of its own so dark mode can change it. */
   --color-ink: var(--color-primary);
@@ -19,13 +29,13 @@
   /*  Hover */
   --color-primary-hover: oklch(27.5% 0.043 231.5); /* #0E2B39 */
   --color-secondary-hover: oklch(38% 0.055 220); /* #1A4957 */
-  --color-tertiary-hover: oklch(60% 0.085 80); /* #9B7A42 */
+  --color-tertiary-hover: oklch(50% 0.085 80); /* #7D5D23 */
   --color-surface-hover: oklch(94% 0.004 145.6); /* #E9ECE9 */
 
   /* Active */
   --color-primary-active: oklch(25% 0.043 231.5); /* #072533 */
   --color-secondary-active: oklch(33% 0.055 220); /* #093C49 */
-  --color-tertiary-active: oklch(55% 0.085 80); /* #8C6C33 */
+  --color-tertiary-active: oklch(45% 0.085 80); /* #6E4F11 */
   --color-surface-active: oklch(90% 0.006 145.6); /* #DCDFDC */
 
   /* Option A — gold + sage */
