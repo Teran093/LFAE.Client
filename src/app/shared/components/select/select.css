@@ -9,10 +9,13 @@
   border-color: var(--role-border);
 }
 
-/* Outline: the trigger is transparent, but the menu needs an opaque background to be readable */
+/*
+ * Outline: the trigger is transparent, but the menu needs an opaque background to be readable.
+ * It uses the same pair as the outline hover state, so it works on light and dark pages.
+ */
 .select-menu-outline {
   @apply border-2;
-  background-color: var(--color-surface);
+  background-color: var(--role-on-accent);
   color: var(--role-accent);
   border-color: var(--role-accent);
 }
