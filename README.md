@@ -13,16 +13,16 @@ The application has two areas:
 
 ### Public site
 
-| Page | Route | Description |
-| --- | --- | --- |
-| Home | `/` | Ministry landing page |
-| Churches | `/churches` | Church directory with an interactive map (Leaflet) |
-| Events | `/events` | Events organized by the ministry and its churches |
-| Offerings | _planned_ | How to give to the ministry |
-| Resources | `/resources` | Downloadable material, such as the brand identity kit |
-| About Us | `/about` | The ministry's story and mission |
-| CEAPE | `/ceape` | A ministry project (coming later) |
-| Photo Gallery | `/photos` | Photo albums from the ministry's Google Drive |
+| Page          | Route        | Description                                           |
+| ------------- | ------------ | ----------------------------------------------------- |
+| Home          | `/`          | Ministry landing page                                 |
+| Churches      | `/churches`  | Church directory with an interactive map (Leaflet)    |
+| Events        | `/events`    | Events organized by the ministry and its churches     |
+| Offerings     | _planned_    | How to give to the ministry                           |
+| Resources     | `/resources` | Downloadable material, such as the brand identity kit |
+| About Us      | `/about`     | The ministry's story and mission                      |
+| CEAPE         | `/ceape`     | A ministry project (coming later)                     |
+| Photo Gallery | `/photos`    | Photo albums from the ministry's Google Drive         |
 
 ### Dashboard (`/dashboard`)
 
@@ -60,14 +60,14 @@ Open `http://localhost:4200`. In development, requests to `/api/**` are proxied 
 
 ## Scripts
 
-| Command | Description |
-| --- | --- |
-| `pnpm start` | Start the dev server with live reload |
-| `pnpm build` | Production build (browser + server) in `dist/LFAE.Client/` |
-| `pnpm serve:ssr:LFAE.Client` | Run the built SSR server (default port 4000, or `PORT`) |
-| `pnpm watch` | Rebuild in development mode on every change |
-| `pnpm lint` | Lint TypeScript and HTML templates |
-| `pnpm test` | Run unit tests with Vitest |
+| Command                      | Description                                                |
+| ---------------------------- | ---------------------------------------------------------- |
+| `pnpm start`                 | Start the dev server with live reload                      |
+| `pnpm build`                 | Production build (browser + server) in `dist/LFAE.Client/` |
+| `pnpm serve:ssr:LFAE.Client` | Run the built SSR server (default port 4000, or `PORT`)    |
+| `pnpm watch`                 | Rebuild in development mode on every change                |
+| `pnpm lint`                  | Lint TypeScript and HTML templates                         |
+| `pnpm test`                  | Run unit tests with Vitest                                 |
 
 ## Project structure
 
@@ -89,3 +89,4 @@ src/
 - Run `pnpm lint` before committing. Prettier formats the code (100-column width).
 - The site serves a wide audience, from older adults to teenagers. Keep the UI simple, readable and accessible (WCAG AA), while still making it look modern.
 - See [CLAUDE.md](CLAUDE.md) for detailed architecture notes and coding conventions.
+- If you use Claude Code, the project's skills load automatically from [.claude/skills/](.claude/skills/). Also install [`web-design-guidelines`](https://github.com/vercel-labs/agent-skills/tree/main/skills/web-design-guidelines) in your user folder (`~/.claude/skills/`); it can't be included in the repository because it has no license. CLAUDE.md has the install commands.
