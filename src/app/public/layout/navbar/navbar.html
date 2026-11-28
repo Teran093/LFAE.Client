@@ -2,12 +2,17 @@
   class="shrink-0 grid grid-cols-[1fr_auto_1fr] items-center justify-between bg-primary p-2 grow"
 >
   <a routerLink="/" aria-label="Navigate to home page" class="text-white">
-    <img src="/logo.svg" alt="Life for All | Europe" />
+    <img
+      ngSrc="/images/brand/lfae-logo-horizontal-white.webp"
+      width="171"
+      height="40"
+      priority
+      alt="Life For All Europe"
+    />
   </a>
 
   <nav aria-label="Main navigation" class="flex items-center">
     <ul class="grid grid-flow-col auto-cols-max list-none gap-5">
-      <li><app-nav-link navTitle="Demo" link="/demo"></app-nav-link></li>
       <li><app-nav-link navTitle="Events" link="/events"></app-nav-link></li>
       <li><app-nav-link navTitle="Churches" link="/churches"></app-nav-link></li>
       <li>
