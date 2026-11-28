@@ -54,3 +54,6 @@ Thumbs.db
 # Lockfiles of other managers
 package-lock.json
 yarn.lock
+
+# Playwright MCP output (screenshots, snapshots, console logs)
+/.playwright-mcp
