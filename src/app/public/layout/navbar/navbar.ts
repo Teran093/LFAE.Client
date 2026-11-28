@@ -6,7 +6,7 @@ import { Button } from '../../../shared/components/button/button';
 import { Select } from '../../../shared/components/select/select';
 import { SelectOption } from '../../../shared/components/select-option/select-option';
 
-/** Top bar of the public site: logo, main links, language selector and Donate button. */
+/** Top bar of the public site: logo, main links, language selector and Give button. */
 @Component({
   imports: [NgOptimizedImage, NavLink, RouterLink, Button, Select, SelectOption],
   selector: 'app-navbar',
